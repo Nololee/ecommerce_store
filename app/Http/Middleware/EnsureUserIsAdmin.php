@@ -15,7 +15,15 @@ class EnsureUserIsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user() || ! $request->user()->is_admin) {
+        $user = $request->user();
+
+        if (! $user) {
+            return redirect()->guest(route('login'))->withErrors([
+                'email' => 'Please sign in to access the administration portal.',
+            ]);
+        }
+
+        if (! $user->is_admin || ! $user->is_active) {
             abort(403, 'Unauthorized access: Administrator privileges required.');
         }
 

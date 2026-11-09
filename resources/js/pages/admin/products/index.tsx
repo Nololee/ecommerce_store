@@ -1,12 +1,18 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import {
     AlertTriangle,
-    ArrowLeft,
     Check,
+    Edit,
     Edit2,
-    ExternalLink,
+    Eye,
+    FolderPlus,
     Package,
+    Plus,
+    Power,
     Search,
+    Trash2,
+    Upload,
+    X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -14,15 +20,21 @@ type Product = {
     id: number;
     name: string;
     slug: string;
-    sku?: string | null;
-    price: string | number;
+    sku: string;
+    price: number | string;
     stock_quantity: number;
     image: string | null;
     is_active: boolean;
+    description: string | null;
     category?: {
         id: number;
         name: string;
     } | null;
+};
+
+type Category = {
+    id: number;
+    name: string;
 };
 
 type PaginationLink = {
@@ -39,9 +51,11 @@ type Props = {
         last_page: number;
         total: number;
     };
+    categories: Category[];
     filters: {
         search: string;
-        low_stock: boolean;
+        category_id: string;
+        stock_filter: string;
     };
 };
 
@@ -55,9 +69,112 @@ function getProductImage(image: string | null): string {
     return `/storage/${image}`;
 }
 
-export default function AdminProductsIndex({ products, filters }: Props) {
+export default function AdminProductsIndex({ products, categories, filters }: Props) {
+    const [search, setSearch] = useState(filters.search);
+    const [selectedCategory, setSelectedCategory] = useState(filters.category_id);
+    const [selectedStockFilter, setSelectedStockFilter] = useState(filters.stock_filter);
+
+    // Modal state for Add/Edit
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+    // Quick stock edit state
     const [editingStockId, setEditingStockId] = useState<number | null>(null);
     const [tempStock, setTempStock] = useState<number>(0);
+
+    const {
+        data,
+        setData,
+        post,
+        put,
+        processing,
+        errors,
+        reset,
+    } = useForm<{
+        name: string;
+        category_id: string | number;
+        sku: string;
+        price: string | number;
+        stock_quantity: string | number;
+        description: string;
+        image: string;
+        image_file: File | null;
+        is_active: boolean;
+    }>({
+        name: '',
+        category_id: categories[0]?.id ?? '',
+        sku: '',
+        price: '',
+        stock_quantity: 10,
+        description: '',
+        image: '',
+        image_file: null,
+        is_active: true,
+    });
+
+    const handleFilterChange = (newSearch: string, newCat: string, newStock: string) => {
+        router.get(
+            '/admin/products',
+            {
+                search: newSearch,
+                category_id: newCat,
+                stock_filter: newStock,
+            },
+            { preserveState: true, preserveScroll: true },
+        );
+    };
+
+    const openCreateModal = () => {
+        setEditingProduct(null);
+        reset();
+        setData({
+            name: '',
+            category_id: categories[0]?.id ?? '',
+            sku: 'SKU-' + Math.floor(1000 + Math.random() * 9000),
+            price: '',
+            stock_quantity: 15,
+            description: '',
+            image: '',
+            image_file: null,
+            is_active: true,
+        });
+        setIsModalOpen(true);
+    };
+
+    const openEditModal = (prod: Product) => {
+        setEditingProduct(prod);
+        setData({
+            name: prod.name,
+            category_id: prod.category?.id ?? (categories[0]?.id ?? ''),
+            sku: prod.sku,
+            price: prod.price,
+            stock_quantity: prod.stock_quantity,
+            description: prod.description ?? '',
+            image: prod.image ?? '',
+            image_file: null,
+            is_active: prod.is_active,
+        });
+        setIsModalOpen(true);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (editingProduct) {
+            put(`/admin/products/${editingProduct.id}`, {
+                onSuccess: () => {
+                    setIsModalOpen(false);
+                    reset();
+                },
+            });
+        } else {
+            post('/admin/products', {
+                onSuccess: () => {
+                    setIsModalOpen(false);
+                    reset();
+                },
+            });
+        }
+    };
 
     const handleSaveStock = (productId: number) => {
         router.patch(
@@ -71,263 +188,436 @@ export default function AdminProductsIndex({ products, filters }: Props) {
     };
 
     const handleToggleActive = (productId: number) => {
-        router.patch(
-            `/admin/products/${productId}/toggle`,
-            {},
-            { preserveScroll: true },
-        );
+        router.patch(`/admin/products/${productId}/toggle`, {}, { preserveScroll: true });
+    };
+
+    const handleDelete = (prod: Product) => {
+        if (confirm(`Are you sure you want to permanently delete product "${prod.name}"? This action cannot be undone.`)) {
+            router.delete(`/admin/products/${prod.id}`, { preserveScroll: true });
+        }
     };
 
     return (
-        <>
-            <Head title="Inventory Management | ARENOLO STORE" />
+        <div className="space-y-6">
+            <Head title="Products Catalogue & Inventory | Admin" />
 
-            <div className="min-h-screen bg-stone-50 p-6 text-[#252820]">
-                <div className="mx-auto max-w-7xl">
-                    {/* Header Top links */}
-                    <div className="mb-6 flex items-center justify-between">
-                        <Link
-                            href="/admin"
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8b9060] hover:underline"
-                        >
-                            <ArrowLeft className="h-3.5 w-3.5" />
-                            <span>Back to Admin Dashboard</span>
-                        </Link>
+            {/* Header & Create Button */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-5">
+                <div>
+                    <h1 className="text-2xl font-black tracking-tight text-stone-900">
+                        Product Catalogue Management
+                    </h1>
+                    <p className="mt-1 text-xs text-stone-500">
+                        Add, update, adjust prices, stock levels, upload images, and control catalogue visibility.
+                    </p>
+                </div>
 
-                        <div className="flex items-center gap-3">
-                            <Link
-                                href="/admin/orders"
-                                className="text-xs font-bold text-stone-600 hover:text-stone-900"
-                            >
-                                Orders
-                            </Link>
-                            <span className="text-stone-300">•</span>
-                            <Link
-                                href="/shop"
-                                className="inline-flex items-center gap-1 text-xs font-bold text-stone-600 hover:text-stone-900"
-                            >
-                                <ExternalLink className="h-3.5 w-3.5" />
-                                <span>Live Store</span>
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-                        <div>
-                            <h1 className="text-3xl font-black text-stone-900">
-                                Product Inventory Management
-                            </h1>
-                            <p className="mt-1 text-sm text-stone-500">
-                                Monitor warehouse stock levels, adjust unit quantities, and control storefront availability.
-                            </p>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                            <Link
-                                href={filters.low_stock ? '/admin/products' : '/admin/products?low_stock=true'}
-                                className={`inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-xs font-bold transition ${
-                                    filters.low_stock
-                                        ? 'border-amber-400 bg-amber-50 text-amber-800'
-                                        : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
-                                }`}
-                            >
-                                <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />
-                                <span>{filters.low_stock ? 'Showing Low Stock (Clear)' : 'Filter Low Stock (≤ 10)'}</span>
-                            </Link>
-                        </div>
-                    </div>
-
-                    {/* Search Bar */}
-                    <form
-                        action="/admin/products"
-                        method="GET"
-                        className="mb-6 flex max-w-md gap-2"
+                <div className="flex items-center gap-3">
+                    <button
+                        type="button"
+                        onClick={openCreateModal}
+                        className="flex items-center gap-2 rounded-xl bg-[#8b9060] px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#787c53] transition"
                     >
-                        <div className="relative flex-1">
-                            <Search className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-stone-400" />
-                            <input
-                                type="search"
-                                name="search"
-                                defaultValue={filters.search}
-                                placeholder="Search by product name or SKU..."
-                                className="h-10 w-full rounded-xl border border-stone-300 bg-white pl-10 pr-3 text-xs outline-none focus:border-[#8b9060]"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="rounded-xl bg-[#252820] px-4 text-xs font-bold text-white transition hover:bg-[#8b9060]"
-                        >
-                            Search
-                        </button>
-                    </form>
+                        <Plus className="h-4 w-4" />
+                        <span>Add New Product</span>
+                    </button>
+                </div>
+            </div>
 
-                    {/* Inventory Table */}
-                    <div className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
-                        {products.data.length === 0 ? (
-                            <div className="px-6 py-20 text-center">
-                                <Package className="mx-auto h-12 w-12 text-stone-300" />
-                                <h3 className="mt-4 text-xl font-bold text-stone-800">
-                                    No products found
-                                </h3>
-                                <p className="mt-1 text-sm text-stone-500">
-                                    Try clearing your search query or low stock filter.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left text-sm">
-                                    <thead className="border-b border-stone-200 bg-stone-50 text-[11px] font-bold uppercase tracking-wider text-stone-500">
-                                        <tr>
-                                            <th className="px-6 py-4">Product Details</th>
-                                            <th className="px-6 py-4">SKU</th>
-                                            <th className="px-6 py-4">Category</th>
-                                            <th className="px-6 py-4">Price</th>
-                                            <th className="px-6 py-4">Stock Quantity</th>
-                                            <th className="px-6 py-4">Availability</th>
-                                            <th className="px-6 py-4 text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-stone-100">
-                                        {products.data.map((product) => {
-                                            const isEditingThis = editingStockId === product.id;
-                                            const isLowStock = product.stock_quantity <= 10;
+            {/* Filters Bar */}
+            <div className="grid grid-cols-1 gap-3 rounded-2xl border border-stone-200/80 bg-white p-4 shadow-2xs sm:grid-cols-4">
+                <div className="relative sm:col-span-2">
+                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                    <input
+                        type="text"
+                        value={search}
+                        placeholder="Search products by title, SKU, description..."
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleFilterChange(search, selectedCategory, selectedStockFilter);
+                            }
+                        }}
+                        className="w-full rounded-xl border border-stone-300 py-2 pl-9 pr-4 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                    />
+                </div>
 
-                                            return (
-                                                <tr key={product.id} className="hover:bg-stone-50/50">
-                                                    <td className="px-6 py-4">
-                                                        <div className="flex items-center gap-3">
-                                                            <img
-                                                                src={getProductImage(product.image)}
-                                                                alt={product.name}
-                                                                className="h-11 w-11 rounded-xl object-cover"
-                                                            />
-                                                            <div>
-                                                                <p className="font-bold text-stone-900">
-                                                                    {product.name}
-                                                                </p>
-                                                                <Link
-                                                                    href={`/shop/${product.slug}`}
-                                                                    target="_blank"
-                                                                    className="text-[11px] text-[#8b9060] hover:underline"
-                                                                >
-                                                                    View product ↗
-                                                                </Link>
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                <div>
+                    <select
+                        value={selectedCategory}
+                        onChange={(e) => {
+                            setSelectedCategory(e.target.value);
+                            handleFilterChange(search, e.target.value, selectedStockFilter);
+                        }}
+                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                    >
+                        <option value="">All Categories</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
-                                                    <td className="px-6 py-4 font-mono text-xs text-stone-500">
-                                                        {product.sku ?? '—'}
-                                                    </td>
+                <div>
+                    <select
+                        value={selectedStockFilter}
+                        onChange={(e) => {
+                            setSelectedStockFilter(e.target.value);
+                            handleFilterChange(search, selectedCategory, e.target.value);
+                        }}
+                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                    >
+                        <option value="">All Stock Levels</option>
+                        <option value="low">Low Stock (&le; 10)</option>
+                        <option value="out">Out of Stock (= 0)</option>
+                        <option value="in">In Stock (&gt; 10)</option>
+                    </select>
+                </div>
+            </div>
 
-                                                    <td className="px-6 py-4 text-xs font-semibold text-stone-600">
-                                                        {product.category?.name ?? 'Uncategorised'}
-                                                    </td>
+            {/* Products Table */}
+            <div className="rounded-2xl border border-stone-200/80 bg-white shadow-2xs overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                            <tr>
+                                <th className="px-4 py-3">Product</th>
+                                <th className="px-4 py-3">Category</th>
+                                <th className="px-4 py-3">Price</th>
+                                <th className="px-4 py-3">Stock Quantity</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-100">
+                            {products.data.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="py-12 text-center text-stone-400">
+                                        No products found matching your filter criteria.
+                                    </td>
+                                </tr>
+                            ) : (
+                                products.data.map((prod) => (
+                                    <tr key={prod.id} className="hover:bg-stone-50/50 transition">
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center gap-3">
+                                                <img
+                                                    src={getProductImage(prod.image)}
+                                                    alt={prod.name}
+                                                    className="h-10 w-10 shrink-0 rounded-lg object-cover border border-stone-200"
+                                                />
+                                                <div>
+                                                    <p className="font-bold text-stone-900">{prod.name}</p>
+                                                    <p className="font-mono text-[10px] text-stone-400">SKU: {prod.sku}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-3 text-stone-600">
+                                            {prod.category?.name ?? 'Uncategorized'}
+                                        </td>
+                                        <td className="px-4 py-3 font-bold text-stone-900">
+                                            R {Number(prod.price).toFixed(2)}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            {editingStockId === prod.id ? (
+                                                <div className="flex items-center gap-1.5">
+                                                    <input
+                                                        type="number"
+                                                        value={tempStock}
+                                                        min={0}
+                                                        onChange={(e) => setTempStock(parseInt(e.target.value) || 0)}
+                                                        className="w-16 rounded border border-stone-300 px-2 py-1 text-xs font-bold text-stone-900"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleSaveStock(prod.id)}
+                                                        className="rounded bg-emerald-600 p-1 text-white hover:bg-emerald-700"
+                                                        title="Save stock"
+                                                    >
+                                                        <Check className="h-3.5 w-3.5" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setEditingStockId(null)}
+                                                        className="rounded bg-stone-300 p-1 text-stone-700 hover:bg-stone-400"
+                                                        title="Cancel"
+                                                    >
+                                                        <X className="h-3.5 w-3.5" />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center gap-2">
+                                                    <span
+                                                        className={`font-mono font-bold ${
+                                                            prod.stock_quantity <= 0
+                                                                ? 'text-red-600'
+                                                                : prod.stock_quantity <= 10
+                                                                ? 'text-amber-600'
+                                                                : 'text-stone-800'
+                                                        }`}
+                                                    >
+                                                        {prod.stock_quantity} units
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setEditingStockId(prod.id);
+                                                            setTempStock(prod.stock_quantity);
+                                                        }}
+                                                        className="rounded p-1 text-stone-400 hover:text-stone-700 hover:bg-stone-100"
+                                                        title="Quick edit stock"
+                                                    >
+                                                        <Edit2 className="h-3 w-3" />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleToggleActive(prod.id)}
+                                                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold transition ${
+                                                    prod.is_active
+                                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                                        : 'bg-stone-100 text-stone-600 border border-stone-300'
+                                                }`}
+                                            >
+                                                <Power className="h-3 w-3" />
+                                                <span>{prod.is_active ? 'ACTIVE' : 'DRAFT'}</span>
+                                            </button>
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <div className="flex items-center justify-end gap-1.5">
+                                                <a
+                                                    href={`/shop/${prod.slug}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
+                                                    title="View on public shop"
+                                                >
+                                                    <Eye className="h-4 w-4" />
+                                                </a>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => openEditModal(prod)}
+                                                    className="rounded-lg p-1.5 text-stone-500 hover:bg-stone-100 hover:text-[#8b9060]"
+                                                    title="Edit product"
+                                                >
+                                                    <Edit className="h-4 w-4" />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDelete(prod)}
+                                                    className="rounded-lg p-1.5 text-stone-400 hover:bg-red-50 hover:text-red-600"
+                                                    title="Delete product"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
-                                                    <td className="px-6 py-4 font-bold text-stone-900">
-                                                        R{Number(product.price).toFixed(2)}
-                                                    </td>
-
-                                                    <td className="px-6 py-4">
-                                                        {isEditingThis ? (
-                                                            <div className="flex items-center gap-2">
-                                                                <input
-                                                                    type="number"
-                                                                    min="0"
-                                                                    value={tempStock}
-                                                                    onChange={(e) => setTempStock(Number(e.target.value))}
-                                                                    className="h-8 w-20 rounded border border-stone-300 px-2 text-xs font-bold outline-none focus:border-[#8b9060]"
-                                                                />
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => handleSaveStock(product.id)}
-                                                                    className="flex h-8 w-8 items-center justify-center rounded bg-[#8b9060] text-white hover:bg-emerald-700"
-                                                                    title="Save stock"
-                                                                >
-                                                                    <Check className="h-4 w-4" />
-                                                                </button>
-                                                            </div>
-                                                        ) : (
-                                                            <div className="flex items-center gap-2">
-                                                                <span
-                                                                    className={`rounded-full px-2.5 py-1 text-xs font-black ${
-                                                                        product.stock_quantity === 0
-                                                                            ? 'bg-red-100 text-red-800'
-                                                                            : isLowStock
-                                                                              ? 'bg-amber-100 text-amber-900'
-                                                                              : 'bg-emerald-50 text-emerald-800'
-                                                                    }`}
-                                                                >
-                                                                    {product.stock_quantity} units
-                                                                </span>
-
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        setEditingStockId(product.id);
-                                                                        setTempStock(product.stock_quantity);
-                                                                    }}
-                                                                    className="text-stone-400 hover:text-stone-700"
-                                                                    title="Edit stock count"
-                                                                >
-                                                                    <Edit2 className="h-3.5 w-3.5" />
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </td>
-
-                                                    <td className="px-6 py-4">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleToggleActive(product.id)}
-                                                            className={`rounded-full px-3 py-1 text-xs font-bold transition ${
-                                                                product.is_active
-                                                                    ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
-                                                                    : 'bg-stone-200 text-stone-600 hover:bg-stone-300'
-                                                            }`}
-                                                            title="Click to toggle status"
-                                                        >
-                                                            {product.is_active ? 'Active in Shop' : 'Hidden / Draft'}
-                                                        </button>
-                                                    </td>
-
-                                                    <td className="px-6 py-4 text-right">
-                                                        <Link
-                                                            href={`/shop/${product.slug}`}
-                                                            target="_blank"
-                                                            className="text-xs font-bold text-stone-600 hover:text-[#8b9060]"
-                                                        >
-                                                            Store View →
-                                                        </Link>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Pagination */}
-                    {products.links && products.links.length > 3 && (
-                        <div className="mt-8 flex justify-center gap-2">
+                {/* Pagination */}
+                {products.links.length > 3 && (
+                    <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50/50 px-4 py-3 text-xs">
+                        <span className="text-stone-500">
+                            Showing {products.data.length} of {products.total} products
+                        </span>
+                        <div className="flex items-center gap-1">
                             {products.links.map((link, idx) => (
                                 <Link
                                     key={idx}
-                                    href={link.url ?? '#'}
-                                    className={`rounded-xl border px-4 py-2 text-xs font-semibold ${
+                                    href={link.url || '#'}
+                                    preserveScroll
+                                    className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${
                                         link.active
-                                            ? 'border-[#252820] bg-[#252820] text-white'
-                                            : 'border-stone-200 bg-white text-stone-700'
-                                    } ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                            ? 'bg-[#8b9060] text-white'
+                                            : link.url
+                                            ? 'text-stone-600 hover:bg-stone-200'
+                                            : 'text-stone-300 pointer-events-none'
+                                    }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
-        </>
+
+            {/* Product Modal (Create / Edit) */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
+                    <div className="relative w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl">
+                        <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+                            <h2 className="text-base font-bold text-stone-900">
+                                {editingProduct ? `Edit Product: ${editingProduct.name}` : 'Add New Product'}
+                            </h2>
+                            <button
+                                type="button"
+                                onClick={() => setIsModalOpen(false)}
+                                className="rounded-lg p-1.5 text-stone-400 hover:bg-stone-100 hover:text-stone-700"
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-700">Product Name *</label>
+                                    <input
+                                        type="text"
+                                        value={data.name}
+                                        required
+                                        onChange={(e) => setData('name', e.target.value)}
+                                        className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    />
+                                    {errors.name && <p className="mt-1 text-[11px] text-red-600">{errors.name}</p>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-700">Category *</label>
+                                    <select
+                                        value={data.category_id}
+                                        required
+                                        onChange={(e) => setData('category_id', e.target.value)}
+                                        className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    >
+                                        {categories.map((c) => (
+                                            <option key={c.id} value={c.id}>
+                                                {c.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.category_id && <p className="mt-1 text-[11px] text-red-600">{errors.category_id}</p>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-700">SKU / Code *</label>
+                                    <input
+                                        type="text"
+                                        value={data.sku}
+                                        required
+                                        onChange={(e) => setData('sku', e.target.value)}
+                                        className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-mono font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    />
+                                    {errors.sku && <p className="mt-1 text-[11px] text-red-600">{errors.sku}</p>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-700">Price (ZAR) *</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min={0}
+                                        value={data.price}
+                                        required
+                                        onChange={(e) => setData('price', e.target.value)}
+                                        className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    />
+                                    {errors.price && <p className="mt-1 text-[11px] text-red-600">{errors.price}</p>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-700">Stock Quantity *</label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        value={data.stock_quantity}
+                                        required
+                                        onChange={(e) => setData('stock_quantity', e.target.value)}
+                                        className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    />
+                                    {errors.stock_quantity && <p className="mt-1 text-[11px] text-red-600">{errors.stock_quantity}</p>}
+                                </div>
+
+                                <div>
+                                    <label className="block text-xs font-bold text-stone-700">Catalogue Status</label>
+                                    <div className="mt-2 flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            id="is_active"
+                                            checked={data.is_active}
+                                            onChange={(e) => setData('is_active', e.target.checked)}
+                                            className="h-4 w-4 rounded border-stone-300 text-[#8b9060] focus:ring-[#8b9060]"
+                                        />
+                                        <label htmlFor="is_active" className="text-xs font-semibold text-stone-800">
+                                            Active (Visible in client storefront)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-stone-700">Image URL or Upload</label>
+                                <input
+                                    type="text"
+                                    value={data.image}
+                                    placeholder="https://images.unsplash.com/..."
+                                    onChange={(e) => setData('image', e.target.value)}
+                                    className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-mono text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                />
+                                <div className="mt-2 flex items-center gap-2">
+                                    <label className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-stone-300 bg-stone-50 px-3 py-1.5 text-[11px] font-bold text-stone-700 hover:bg-stone-100">
+                                        <Upload className="h-3.5 w-3.5" />
+                                        <span>Or choose image file</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                if (e.target.files?.[0]) {
+                                                    setData('image_file', e.target.files[0]);
+                                                }
+                                            }}
+                                        />
+                                    </label>
+                                    {data.image_file && (
+                                        <span className="text-[11px] text-stone-600 font-semibold truncate">
+                                            {data.image_file.name}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-stone-700">Description</label>
+                                <textarea
+                                    rows={3}
+                                    value={data.description}
+                                    onChange={(e) => setData('description', e.target.value)}
+                                    placeholder="Detailed product descriptions, features, specifications..."
+                                    className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                />
+                            </div>
+
+                            <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-200">
+                                <button
+                                    type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="rounded-xl border border-stone-300 px-4 py-2 text-xs font-bold text-stone-700 hover:bg-stone-50"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="rounded-xl bg-[#8b9060] px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#787c53] disabled:opacity-50"
+                                >
+                                    {processing ? 'Saving...' : editingProduct ? 'Save Changes' : 'Create Product'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

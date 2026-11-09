@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
+use App\Models\InventoryLog;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
@@ -129,8 +131,21 @@ class CheckoutController extends Controller
                     'line_total' => $lineTotal,
                 ];
 
+                $stockBefore = $product->stock_quantity;
+                $stockAfter = $stockBefore - $requestedQty;
+
                 // Decrement inventory (Inventory Management)
                 $product->decrement('stock_quantity', $requestedQty);
+
+                InventoryLog::create([
+                    'product_id' => $product->id,
+                    'user_id' => $request->user()?->id,
+                    'change_type' => 'order_placed',
+                    'quantity_before' => $stockBefore,
+                    'quantity_change' => -$requestedQty,
+                    'quantity_after' => $stockAfter,
+                    'reason' => 'Customer purchase order',
+                ]);
             }
 
             $shippingFee = $subtotal >= 800 ? 0.00 : 75.00;
@@ -167,6 +182,15 @@ class CheckoutController extends Controller
             foreach ($itemsData as $item) {
                 $order->items()->create($item);
             }
+
+            ActivityLog::record(
+                'order_placed',
+                "Customer {$order->customer_name} placed Order #{$order->tracking_number} for R {$order->total_amount}",
+                $order,
+                $request->user(),
+                ['total' => $order->total_amount, 'items_count' => count($itemsData)],
+                'customer'
+            );
 
             return $order;
         });

@@ -24,6 +24,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property Carbon|null $email_verified_at
  * @property string $password
  * @property bool $is_admin
+ * @property bool $is_active
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
  * @property Carbon|null $two_factor_confirmed_at
@@ -36,7 +37,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property-read Collection<int, Membership> $teamMemberships
  * @property-read Collection<int, Team> $teams
  */
-#[Fillable(['name', 'email', 'password', 'is_admin', 'current_team_id'])]
+#[Fillable(['name', 'email', 'phone', 'password', 'is_admin', 'is_active', 'current_team_id'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
@@ -55,6 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'is_admin' => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 

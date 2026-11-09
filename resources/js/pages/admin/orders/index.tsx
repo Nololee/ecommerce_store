@@ -1,17 +1,43 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft, ExternalLink, Package, ShoppingBag } from 'lucide-react';
+import {
+    AlertCircle,
+    Calendar,
+    CheckCircle2,
+    Clock,
+    CreditCard,
+    DollarSign,
+    Filter,
+    Package,
+    Phone,
+    RefreshCw,
+    Search,
+    ShoppingBag,
+    Truck,
+    User,
+    XCircle,
+} from 'lucide-react';
+import { useState } from 'react';
+
+type OrderItem = {
+    id: number;
+    product_name: string;
+    quantity: number;
+    price: number;
+    line_total: number;
+};
 
 type Order = {
     id: number;
     tracking_number: string;
     customer_name: string;
     customer_email: string;
+    customer_phone: string | null;
     total_amount: number;
     status: string;
     payment_status: string;
     payment_method: string;
     created_at: string;
-    items_count?: number;
+    items: OrderItem[];
 };
 
 type PaginationLink = {
@@ -24,190 +50,214 @@ type Props = {
     orders: {
         data: Order[];
         links: PaginationLink[];
-        current_page: number;
-        last_page: number;
         total: number;
     };
     filters: {
         status: string;
+        payment_status: string;
+        search: string;
     };
 };
 
 export default function AdminOrdersIndex({ orders, filters }: Props) {
-    const formatPrice = (price: number) => `R${Number(price).toFixed(2)}`;
+    const [search, setSearch] = useState(filters.search);
+    const [status, setStatus] = useState(filters.status);
+    const [paymentStatus, setPaymentStatus] = useState(filters.payment_status);
 
-    const statuses = [
-        { label: 'All Orders', value: '' },
-        { label: 'Processing', value: 'processing' },
-        { label: 'Shipped', value: 'shipped' },
-        { label: 'Delivered', value: 'delivered' },
-        { label: 'Cancelled', value: 'cancelled' },
-    ];
+    const handleFilter = (newSearch: string, newStatus: string, newPay: string) => {
+        router.get(
+            '/admin/orders',
+            { search: newSearch, status: newStatus, payment_status: newPay },
+            { preserveState: true, preserveScroll: true },
+        );
+    };
 
-    const getStatusBadge = (status: string) => {
-        switch (status) {
-            case 'delivered':
-                return 'bg-emerald-100 text-emerald-800';
-            case 'shipped':
-                return 'bg-blue-100 text-blue-800';
-            case 'processing':
-                return 'bg-amber-100 text-amber-800';
-            case 'cancelled':
-                return 'bg-red-100 text-red-800';
-            default:
-                return 'bg-stone-100 text-stone-800';
-        }
+    const formatCurrency = (val: number) => {
+        return new Intl.NumberFormat('en-ZA', {
+            style: 'currency',
+            currency: 'ZAR',
+        }).format(val);
     };
 
     return (
-        <>
-            <Head title="Order Management | ARENOLO STORE" />
+        <div className="space-y-6">
+            <Head title="Orders Management | Admin" />
 
-            <div className="min-h-screen bg-stone-50 p-6 text-[#252820]">
-                <div className="mx-auto max-w-7xl">
-                    <div className="mb-6 flex items-center justify-between">
-                        <Link
-                            href="/admin"
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8b9060] hover:underline"
-                        >
-                            <ArrowLeft className="h-3.5 w-3.5" />
-                            <span>Back to Admin Dashboard</span>
-                        </Link>
+            {/* Header */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-5">
+                <div>
+                    <h1 className="text-2xl font-black tracking-tight text-stone-900">
+                        Orders & Fulfillment
+                    </h1>
+                    <p className="mt-1 text-xs text-stone-500">
+                        Track orders, update fulfillment statuses, process deliveries, and review payment validations.
+                    </p>
+                </div>
+            </div>
 
-                        <Link
-                            href="/shop"
-                            className="inline-flex items-center gap-1 text-xs font-bold text-stone-600 hover:text-stone-900"
-                        >
-                            <ExternalLink className="h-3.5 w-3.5" />
-                            <span>Storefront</span>
-                        </Link>
-                    </div>
+            {/* Filter controls */}
+            <div className="grid grid-cols-1 gap-3 rounded-2xl border border-stone-200/80 bg-white p-4 shadow-2xs sm:grid-cols-4">
+                <div className="relative sm:col-span-2">
+                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                    <input
+                        type="text"
+                        value={search}
+                        placeholder="Search tracking #, customer name, email, phone..."
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                handleFilter(search, status, paymentStatus);
+                            }
+                        }}
+                        className="w-full rounded-xl border border-stone-300 py-2 pl-9 pr-4 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                    />
+                </div>
 
-                    <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-                        <div>
-                            <h1 className="text-3xl font-black text-stone-900">
-                                Customer Orders
-                            </h1>
-                            <p className="mt-1 text-sm text-stone-500">
-                                Fulfill, inspect and update customer purchase orders.
-                            </p>
-                        </div>
+                <div>
+                    <select
+                        value={status}
+                        onChange={(e) => {
+                            setStatus(e.target.value);
+                            handleFilter(search, e.target.value, paymentStatus);
+                        }}
+                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                    >
+                        <option value="">All Fulfillment Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
 
-                        <div className="rounded-2xl border border-stone-200 bg-white px-4 py-2 text-xs font-bold text-stone-700 shadow-sm">
-                            Total Orders: {orders.total}
-                        </div>
-                    </div>
+                <div>
+                    <select
+                        value={paymentStatus}
+                        onChange={(e) => {
+                            setPaymentStatus(e.target.value);
+                            handleFilter(search, status, e.target.value);
+                        }}
+                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                    >
+                        <option value="">All Payment Statuses</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                        <option value="refunded">Refunded</option>
+                    </select>
+                </div>
+            </div>
 
-                    {/* Status Filter Tabs */}
-                    <div className="mb-6 flex flex-wrap items-center gap-2">
-                        {statuses.map((s) => (
-                            <Link
-                                key={s.value}
-                                href={s.value ? `/admin/orders?status=${s.value}` : '/admin/orders'}
-                                className={`rounded-xl px-4 py-2 text-xs font-bold transition ${
-                                    filters.status === s.value
-                                        ? 'bg-[#252820] text-white shadow-sm'
-                                        : 'border border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
-                                }`}
-                            >
-                                {s.label}
-                            </Link>
-                        ))}
-                    </div>
+            {/* Orders Table */}
+            <div className="rounded-2xl border border-stone-200/80 bg-white shadow-2xs overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                            <tr>
+                                <th className="px-4 py-3">Order Number</th>
+                                <th className="px-4 py-3">Customer</th>
+                                <th className="px-4 py-3">Items</th>
+                                <th className="px-4 py-3">Total Amount</th>
+                                <th className="px-4 py-3">Payment</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-stone-100">
+                            {orders.data.length === 0 ? (
+                                <tr>
+                                    <td colSpan={7} className="py-12 text-center text-stone-400">
+                                        No order records found matching criteria.
+                                    </td>
+                                </tr>
+                            ) : (
+                                orders.data.map((order) => (
+                                    <tr key={order.id} className="hover:bg-stone-50/50 transition">
+                                        <td className="px-4 py-3 font-mono font-bold text-stone-900">
+                                            {order.tracking_number}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <p className="font-semibold text-stone-900">{order.customer_name}</p>
+                                            <p className="text-[11px] text-stone-400">{order.customer_email}</p>
+                                        </td>
+                                        <td className="px-4 py-3 text-stone-600">
+                                            {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                                        </td>
+                                        <td className="px-4 py-3 font-bold text-stone-900">
+                                            {formatCurrency(Number(order.total_amount))}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <span
+                                                className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                                    order.payment_status === 'paid'
+                                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                                        : order.payment_status === 'failed'
+                                                        ? 'bg-red-50 text-red-700 border border-red-200'
+                                                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                                }`}
+                                            >
+                                                {order.payment_status.toUpperCase()}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <span
+                                                className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                                                    order.status === 'delivered'
+                                                        ? 'bg-emerald-50 text-emerald-700'
+                                                        : order.status === 'cancelled'
+                                                        ? 'bg-red-50 text-red-700'
+                                                        : order.status === 'shipped'
+                                                        ? 'bg-purple-50 text-purple-700'
+                                                        : order.status === 'processing'
+                                                        ? 'bg-blue-50 text-blue-700'
+                                                        : 'bg-amber-50 text-amber-700'
+                                                }`}
+                                            >
+                                                {order.status.toUpperCase()}
+                                            </span>
+                                        </td>
+                                        <td className="px-4 py-3 text-right">
+                                            <Link
+                                                href={`/admin/orders/${order.id}`}
+                                                className="rounded-lg bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-800 hover:bg-[#8b9060] hover:text-white transition"
+                                            >
+                                                View Order
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
-                    {/* Orders Table */}
-                    <div className="overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-sm">
-                        {orders.data.length === 0 ? (
-                            <div className="px-6 py-20 text-center">
-                                <Package className="mx-auto h-12 w-12 text-stone-300" />
-                                <h3 className="mt-4 text-xl font-bold text-stone-800">
-                                    No orders found
-                                </h3>
-                                <p className="mt-1 text-sm text-stone-500">
-                                    No orders matching this status filter have been placed yet.
-                                </p>
-                            </div>
-                        ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-left text-sm">
-                                    <thead className="border-b border-stone-200 bg-stone-50 text-[11px] font-bold uppercase tracking-wider text-stone-500">
-                                        <tr>
-                                            <th className="px-6 py-4">Order Ref</th>
-                                            <th className="px-6 py-4">Customer</th>
-                                            <th className="px-6 py-4">Amount</th>
-                                            <th className="px-6 py-4">Payment</th>
-                                            <th className="px-6 py-4">Status</th>
-                                            <th className="px-6 py-4 text-right">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-stone-100">
-                                        {orders.data.map((order) => (
-                                            <tr key={order.id} className="hover:bg-stone-50/50">
-                                                <td className="px-6 py-4 font-mono text-xs font-bold text-stone-900">
-                                                    #{order.tracking_number}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <p className="font-bold text-stone-900">{order.customer_name}</p>
-                                                    <p className="text-xs text-stone-400">{order.customer_email}</p>
-                                                </td>
-                                                <td className="px-6 py-4 font-black text-stone-900">
-                                                    {formatPrice(order.total_amount)}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <span
-                                                        className={`rounded-full px-2.5 py-1 text-xs font-bold uppercase ${
-                                                            order.payment_status === 'paid'
-                                                                ? 'bg-emerald-50 text-emerald-700'
-                                                                : 'bg-amber-50 text-amber-700'
-                                                        }`}
-                                                    >
-                                                        {order.payment_status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <span
-                                                        className={`rounded-full px-3 py-1 text-xs font-bold capitalize ${getStatusBadge(
-                                                            order.status,
-                                                        )}`}
-                                                    >
-                                                        {order.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 text-right">
-                                                    <Link
-                                                        href={`/admin/orders/${order.id}`}
-                                                        className="text-xs font-bold text-[#8b9060] hover:underline"
-                                                    >
-                                                        View Order →
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Pagination */}
-                    {orders.links && orders.links.length > 3 && (
-                        <div className="mt-8 flex justify-center gap-2">
+                {/* Pagination */}
+                {orders.links.length > 3 && (
+                    <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50/50 px-4 py-3 text-xs">
+                        <span className="text-stone-500">
+                            Total orders: {orders.total}
+                        </span>
+                        <div className="flex items-center gap-1">
                             {orders.links.map((link, idx) => (
                                 <Link
                                     key={idx}
-                                    href={link.url ?? '#'}
-                                    className={`rounded-xl border px-4 py-2 text-xs font-semibold ${
+                                    href={link.url || '#'}
+                                    preserveScroll
+                                    className={`rounded-lg px-2.5 py-1 text-xs font-semibold ${
                                         link.active
-                                            ? 'border-[#252820] bg-[#252820] text-white'
-                                            : 'border-stone-200 bg-white text-stone-700'
-                                    } ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                            ? 'bg-[#8b9060] text-white'
+                                            : link.url
+                                            ? 'text-stone-600 hover:bg-stone-200'
+                                            : 'text-stone-300 pointer-events-none'
+                                    }`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
                             ))}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
-        </>
+        </div>
     );
 }

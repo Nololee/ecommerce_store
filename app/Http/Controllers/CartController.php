@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -74,6 +75,17 @@ class CartController extends Controller
 
         $request->session()->put('cart', $cart);
 
+        if ($request->user()) {
+            ActivityLog::record(
+                'cart_add',
+                "Customer added {$quantity}x {$product->name} to cart",
+                $product,
+                $request->user(),
+                ['quantity' => $quantity, 'total_in_cart' => $newQuantity],
+                'customer'
+            );
+        }
+
         return back()->with('success', "Added {$product->name} to your cart.");
     }
 
@@ -109,6 +121,17 @@ class CartController extends Controller
         unset($cart[$product->id]);
 
         $request->session()->put('cart', $cart);
+
+        if ($request->user()) {
+            ActivityLog::record(
+                'cart_remove',
+                "Customer removed {$product->name} from cart",
+                $product,
+                $request->user(),
+                ['product_id' => $product->id],
+                'customer'
+            );
+        }
 
         return back()->with('success', "Removed {$product->name} from your cart.");
     }

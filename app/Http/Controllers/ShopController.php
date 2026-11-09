@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -49,6 +51,17 @@ class ShopController extends Controller
         abort_unless($product->is_active, 404);
 
         $product->load('category');
+
+        if (auth()->check()) {
+            ActivityLog::record(
+                'product_view',
+                "Customer viewed product {$product->name}",
+                $product,
+                auth()->user(),
+                ['product_id' => $product->id, 'price' => $product->price],
+                'customer'
+            );
+        }
 
         return Inertia::render('shop/show', [
             'product' => $product,

@@ -29,7 +29,7 @@ test('authenticated customer can access checkout with cart items', function () {
         ->get(route('checkout.index'));
 
     $response->assertOk();
-    $response->assertSee('Checkout & Payment');
+    $response->assertInertia(fn ($page) => $page->component('checkout/index'));
 });
 
 test('checkout fails when cart is empty', function () {
