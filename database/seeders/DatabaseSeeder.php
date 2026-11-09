@@ -15,11 +15,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            CategorySeeder::class,
+            ProductSeeder::class,
         ]);
+
+        User::updateOrCreate(
+            ['email' => 'admin@arenolostore.com'],
+            [
+                'name' => 'Store Administrator',
+                'password' => bcrypt('admin123'),
+                'is_admin' => true,
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'customer@example.com'],
+            [
+                'name' => 'Sample Customer',
+                'password' => bcrypt('password'),
+                'is_admin' => false,
+            ]
+        );
     }
 }
