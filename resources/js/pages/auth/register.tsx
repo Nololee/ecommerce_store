@@ -1,4 +1,3 @@
-
 import { Form, Head } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
@@ -17,10 +16,7 @@ type Props = {
     teamInvitation?: TeamInvitationContext | null;
 };
 
-export default function Register({
-    passwordRules,
-    teamInvitation,
-}: Props) {
+export default function Register({ passwordRules, teamInvitation }: Props) {
     return (
         <>
             <Head title="Create Account | Your Store" />

@@ -54,7 +54,7 @@ export default function OrderTrack({ recentOrders = [] }: Props) {
                             <Package className="h-8 w-8" />
                         </div>
 
-                        <p className="mt-4 text-xs font-bold uppercase tracking-[0.25em] text-[#8b9060]">
+                        <p className="mt-4 text-xs font-bold tracking-[0.25em] text-[#8b9060] uppercase">
                             Real-Time Updates
                         </p>
 
@@ -63,20 +63,27 @@ export default function OrderTrack({ recentOrders = [] }: Props) {
                         </h1>
 
                         <p className="mx-auto mt-3 max-w-lg text-sm text-stone-600">
-                            Enter your unique order tracking number (sent to your confirmation email or generated at checkout) to view delivery status.
+                            Enter your unique order tracking number (sent to
+                            your confirmation email or generated at checkout) to
+                            view delivery status.
                         </p>
 
                         {/* Search Input */}
-                        <form onSubmit={handleSearch} className="mx-auto mt-8 flex max-w-xl gap-2">
+                        <form
+                            onSubmit={handleSearch}
+                            className="mx-auto mt-8 flex max-w-xl gap-2"
+                        >
                             <div className="relative flex-1">
-                                <Search className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-stone-400" />
+                                <Search className="pointer-events-none absolute top-3.5 left-4 h-5 w-5 text-stone-400" />
                                 <input
                                     type="text"
                                     value={trackingNumber}
-                                    onChange={(e) => setTrackingNumber(e.target.value)}
+                                    onChange={(e) =>
+                                        setTrackingNumber(e.target.value)
+                                    }
                                     placeholder="e.g. ARN-2026-ABC123"
                                     required
-                                    className="h-12 w-full rounded-2xl border border-stone-300 bg-white pl-12 pr-4 text-sm font-semibold uppercase tracking-wider outline-none focus:border-[#8b9060]"
+                                    className="h-12 w-full rounded-2xl border border-stone-300 bg-white pr-4 pl-12 text-sm font-semibold tracking-wider uppercase outline-none focus:border-[#8b9060]"
                                 />
                             </div>
 
@@ -97,7 +104,8 @@ export default function OrderTrack({ recentOrders = [] }: Props) {
                                 Your Recent Orders
                             </h2>
                             <p className="mt-1 text-xs text-stone-500">
-                                Click on any tracking number to view full shipment details.
+                                Click on any tracking number to view full
+                                shipment details.
                             </p>
 
                             <div className="mt-6 divide-y divide-stone-100">
@@ -114,7 +122,8 @@ export default function OrderTrack({ recentOrders = [] }: Props) {
                                                 #{order.tracking_number}
                                             </Link>
                                             <p className="text-xs text-stone-400">
-                                                Placed on {order.created_at} • {order.items_count} items
+                                                Placed on {order.created_at} •{' '}
+                                                {order.items_count} items
                                             </p>
                                         </div>
 

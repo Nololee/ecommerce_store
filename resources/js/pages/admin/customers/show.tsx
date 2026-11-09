@@ -60,7 +60,11 @@ type Props = {
     activities: ActivityLog[];
 };
 
-export default function AdminCustomerShow({ customer, orders, activities }: Props) {
+export default function AdminCustomerShow({
+    customer,
+    orders,
+    activities,
+}: Props) {
     const formatCurrency = (val: number | string | null) => {
         return new Intl.NumberFormat('en-ZA', {
             style: 'currency',
@@ -69,7 +73,11 @@ export default function AdminCustomerShow({ customer, orders, activities }: Prop
     };
 
     const handleToggleStatus = () => {
-        router.patch(`/admin/customers/${customer.id}/toggle-status`, {}, { preserveScroll: true });
+        router.patch(
+            `/admin/customers/${customer.id}/toggle-status`,
+            {},
+            { preserveScroll: true },
+        );
     };
 
     return (
@@ -80,32 +88,40 @@ export default function AdminCustomerShow({ customer, orders, activities }: Prop
             <div>
                 <Link
                     href="/admin/customers"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-500 hover:text-stone-900 transition mb-3"
+                    className="mb-3 inline-flex items-center gap-1.5 text-xs font-bold text-stone-500 transition hover:text-stone-900"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     <span>Back to Customers Directory</span>
                 </Link>
 
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-5">
+                <div className="flex flex-col gap-4 border-b border-stone-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#8b9060]/20 font-black text-xl text-[#676c3f]">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#8b9060]/20 text-xl font-black text-[#676c3f]">
                             {customer.name[0]?.toUpperCase()}
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <h1 className="text-2xl font-black text-stone-900">{customer.name}</h1>
+                                <h1 className="text-2xl font-black text-stone-900">
+                                    {customer.name}
+                                </h1>
                                 <span
                                     className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
                                         customer.is_active
-                                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                            : 'bg-red-50 text-red-700 border border-red-200'
+                                            ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                                            : 'border border-red-200 bg-red-50 text-red-700'
                                     }`}
                                 >
-                                    {customer.is_active ? 'ACTIVE' : 'SUSPENDED'}
+                                    {customer.is_active
+                                        ? 'ACTIVE'
+                                        : 'SUSPENDED'}
                                 </span>
                             </div>
                             <p className="text-xs text-stone-500">
-                                Registered customer ID #{customer.id} &bull; Joined on {new Date(customer.created_at).toLocaleDateString()}
+                                Registered customer ID #{customer.id} &bull;
+                                Joined on{' '}
+                                {new Date(
+                                    customer.created_at,
+                                ).toLocaleDateString()}
                             </p>
                         </div>
                     </div>
@@ -120,7 +136,11 @@ export default function AdminCustomerShow({ customer, orders, activities }: Prop
                         }`}
                     >
                         <Power className="h-4 w-4" />
-                        <span>{customer.is_active ? 'Suspend Customer Account' : 'Reactivate Account'}</span>
+                        <span>
+                            {customer.is_active
+                                ? 'Suspend Customer Account'
+                                : 'Reactivate Account'}
+                        </span>
                     </button>
                 </div>
             </div>
@@ -128,21 +148,39 @@ export default function AdminCustomerShow({ customer, orders, activities }: Prop
             {/* Summary Cards */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Total Lifetime Spend</span>
-                    <p className="mt-2 text-2xl font-black text-stone-900">{formatCurrency(customer.total_spent)}</p>
-                    <span className="text-[11px] text-stone-400">Paid purchases</span>
+                    <span className="text-xs font-bold tracking-wider text-stone-500 uppercase">
+                        Total Lifetime Spend
+                    </span>
+                    <p className="mt-2 text-2xl font-black text-stone-900">
+                        {formatCurrency(customer.total_spent)}
+                    </p>
+                    <span className="text-[11px] text-stone-400">
+                        Paid purchases
+                    </span>
                 </div>
 
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Total Orders Placed</span>
-                    <p className="mt-2 text-2xl font-black text-stone-900">{customer.orders_count}</p>
-                    <span className="text-[11px] text-stone-400">Order count</span>
+                    <span className="text-xs font-bold tracking-wider text-stone-500 uppercase">
+                        Total Orders Placed
+                    </span>
+                    <p className="mt-2 text-2xl font-black text-stone-900">
+                        {customer.orders_count}
+                    </p>
+                    <span className="text-[11px] text-stone-400">
+                        Order count
+                    </span>
                 </div>
 
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Contact Details</span>
-                    <p className="mt-2 text-xs font-bold text-stone-900 truncate">{customer.email}</p>
-                    <p className="text-xs font-mono text-stone-500 mt-0.5">{customer.phone || 'No phone number'}</p>
+                    <span className="text-xs font-bold tracking-wider text-stone-500 uppercase">
+                        Contact Details
+                    </span>
+                    <p className="mt-2 truncate text-xs font-bold text-stone-900">
+                        {customer.email}
+                    </p>
+                    <p className="mt-0.5 font-mono text-xs text-stone-500">
+                        {customer.phone || 'No phone number'}
+                    </p>
                 </div>
             </div>
 
@@ -150,40 +188,52 @@ export default function AdminCustomerShow({ customer, orders, activities }: Prop
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {/* Orders History */}
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-6 shadow-2xs lg:col-span-2">
-                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-wider mb-4">
+                    <h2 className="mb-4 text-sm font-bold tracking-wider text-stone-900 uppercase">
                         Order History ({orders.total})
                     </h2>
 
                     <div className="divide-y divide-stone-100">
                         {orders.data.length === 0 ? (
-                            <p className="py-6 text-center text-xs text-stone-400">No orders placed by this customer.</p>
+                            <p className="py-6 text-center text-xs text-stone-400">
+                                No orders placed by this customer.
+                            </p>
                         ) : (
                             orders.data.map((order) => (
-                                <div key={order.id} className="py-4 flex items-center justify-between">
+                                <div
+                                    key={order.id}
+                                    className="flex items-center justify-between py-4"
+                                >
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <span className="font-mono font-bold text-xs text-stone-900">
+                                            <span className="font-mono text-xs font-bold text-stone-900">
                                                 {order.tracking_number}
                                             </span>
                                             <span
                                                 className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
                                                     order.status === 'delivered'
                                                         ? 'bg-emerald-50 text-emerald-700'
-                                                        : order.status === 'cancelled'
-                                                        ? 'bg-red-50 text-red-700'
-                                                        : 'bg-blue-50 text-blue-700'
+                                                        : order.status ===
+                                                            'cancelled'
+                                                          ? 'bg-red-50 text-red-700'
+                                                          : 'bg-blue-50 text-blue-700'
                                                 }`}
                                             >
                                                 {order.status.toUpperCase()}
                                             </span>
                                         </div>
-                                        <p className="text-[11px] text-stone-500 mt-1">
-                                            {order.items.length} items &bull; Placed {new Date(order.created_at).toLocaleString()}
+                                        <p className="mt-1 text-[11px] text-stone-500">
+                                            {order.items.length} items &bull;
+                                            Placed{' '}
+                                            {new Date(
+                                                order.created_at,
+                                            ).toLocaleString()}
                                         </p>
                                     </div>
 
                                     <div className="text-right">
-                                        <p className="text-xs font-bold text-stone-900">{formatCurrency(order.total_amount)}</p>
+                                        <p className="text-xs font-bold text-stone-900">
+                                            {formatCurrency(order.total_amount)}
+                                        </p>
                                         <Link
                                             href={`/admin/orders/${order.id}`}
                                             className="text-[11px] font-bold text-[#8b9060] hover:underline"
@@ -199,20 +249,38 @@ export default function AdminCustomerShow({ customer, orders, activities }: Prop
 
                 {/* Customer Activity Log Timeline */}
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-6 shadow-2xs">
-                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-wider mb-4">
+                    <h2 className="mb-4 text-sm font-bold tracking-wider text-stone-900 uppercase">
                         Activity Timeline
                     </h2>
 
                     <div className="space-y-4">
                         {activities.length === 0 ? (
-                            <p className="text-center py-6 text-xs text-stone-400">No activity recorded yet.</p>
+                            <p className="py-6 text-center text-xs text-stone-400">
+                                No activity recorded yet.
+                            </p>
                         ) : (
                             activities.map((act) => (
-                                <div key={act.id} className="border-l-2 border-[#8b9060] pl-3 py-1">
-                                    <p className="text-xs font-semibold text-stone-800">{act.description}</p>
+                                <div
+                                    key={act.id}
+                                    className="border-l-2 border-[#8b9060] py-1 pl-3"
+                                >
+                                    <p className="text-xs font-semibold text-stone-800">
+                                        {act.description}
+                                    </p>
                                     <div className="mt-1 flex items-center gap-2 text-[10px] text-stone-400">
-                                        <span>{new Date(act.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                        {act.ip_address && <span>&bull; IP: {act.ip_address}</span>}
+                                        <span>
+                                            {new Date(
+                                                act.created_at,
+                                            ).toLocaleTimeString([], {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}
+                                        </span>
+                                        {act.ip_address && (
+                                            <span>
+                                                &bull; IP: {act.ip_address}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             ))

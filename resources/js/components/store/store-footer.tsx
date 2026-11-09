@@ -9,27 +9,67 @@ export default function StoreFooter() {
                         ARENOLO<span className="text-[#8b9060]">STORE.</span>
                     </h2>
                     <p className="mt-4 text-sm leading-7 text-gray-400">
-                        Your destination for quality fashion, electronics, skincare, home decor and everyday essentials.
+                        Your destination for quality fashion, electronics,
+                        skincare, home decor and everyday essentials.
                     </p>
                 </div>
 
                 <div>
                     <h3 className="mb-4 font-bold text-white">Quick Links</h3>
                     <div className="flex flex-col gap-3 text-sm text-gray-400">
-                        <Link href="/" className="transition hover:text-white">Home</Link>
-                        <Link href="/shop" className="transition hover:text-white">Shop All Products</Link>
-                        <Link href="/cart" className="transition hover:text-white">Shopping Cart</Link>
-                        <Link href="/track-order" className="transition hover:text-white">Track Order</Link>
-                        <Link href="/#about" className="transition hover:text-white">About Us</Link>
+                        <Link href="/" className="transition hover:text-white">
+                            Home
+                        </Link>
+                        <Link
+                            href="/shop"
+                            className="transition hover:text-white"
+                        >
+                            Shop All Products
+                        </Link>
+                        <Link
+                            href="/cart"
+                            className="transition hover:text-white"
+                        >
+                            Shopping Cart
+                        </Link>
+                        <Link
+                            href="/track-order"
+                            className="transition hover:text-white"
+                        >
+                            Track Order
+                        </Link>
+                        <Link
+                            href="/#about"
+                            className="transition hover:text-white"
+                        >
+                            About Us
+                        </Link>
                     </div>
                 </div>
 
                 <div>
-                    <h3 className="mb-4 font-bold text-white">Customer Account</h3>
+                    <h3 className="mb-4 font-bold text-white">
+                        Customer Account
+                    </h3>
                     <div className="flex flex-col gap-3 text-sm text-gray-400">
-                        <Link href="/login" className="transition hover:text-white">Sign In</Link>
-                        <Link href="/register" className="transition hover:text-white">Register Account</Link>
-                        <Link href="/track-order" className="transition hover:text-white">Order History & Tracking</Link>
+                        <Link
+                            href="/login"
+                            className="transition hover:text-white"
+                        >
+                            Sign In
+                        </Link>
+                        <Link
+                            href="/register"
+                            className="transition hover:text-white"
+                        >
+                            Register Account
+                        </Link>
+                        <Link
+                            href="/track-order"
+                            className="transition hover:text-white"
+                        >
+                            Order History & Tracking
+                        </Link>
                     </div>
                 </div>
             </div>

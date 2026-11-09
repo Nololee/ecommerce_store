@@ -33,11 +33,11 @@ export default function Welcome({ products }: Props) {
             <section className="relative overflow-hidden bg-[#eeeee5]">
                 <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:py-24">
                     <div className="max-w-xl">
-                        <span className="mb-6 inline-block rounded-full bg-white px-5 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#8b9060]">
+                        <span className="mb-6 inline-block rounded-full bg-white px-5 py-2 text-xs font-bold tracking-[0.2em] text-[#8b9060] uppercase">
                             Welcome to ARENOLO Store
                         </span>
 
-                        <h1 className="text-5xl font-black leading-tight tracking-tight md:text-7xl">
+                        <h1 className="text-5xl leading-tight font-black tracking-tight md:text-7xl">
                             Find Your
                             <span className="block text-[#969b60]">
                                 Everyday
@@ -47,8 +47,8 @@ export default function Welcome({ products }: Props) {
 
                         <p className="mt-7 max-w-md text-base leading-8 text-gray-600">
                             Discover quality products, amazing finds and
-                            everyday essentials all in one place.
-                            Shopping made simple, convenient and enjoyable.
+                            everyday essentials all in one place. Shopping made
+                            simple, convenient and enjoyable.
                         </p>
 
                         <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -70,21 +70,27 @@ export default function Welcome({ products }: Props) {
                         <div className="mt-12 flex flex-wrap gap-8">
                             <div>
                                 <p className="text-2xl font-black">Quality</p>
-                                <p className="mt-1 text-xs text-gray-500">Products you can trust</p>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    Products you can trust
+                                </p>
                             </div>
                             <div>
                                 <p className="text-2xl font-black">Easy</p>
-                                <p className="mt-1 text-xs text-gray-500">Online shopping</p>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    Online shopping
+                                </p>
                             </div>
                             <div>
                                 <p className="text-2xl font-black">Secure</p>
-                                <p className="mt-1 text-xs text-gray-500">Shopping experience</p>
+                                <p className="mt-1 text-xs text-gray-500">
+                                    Shopping experience
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <div className="relative">
-                        <div className="absolute -right-5 -top-5 h-40 w-40 rounded-full bg-[#d8d9bd] blur-2xl"></div>
+                        <div className="absolute -top-5 -right-5 h-40 w-40 rounded-full bg-[#d8d9bd] blur-2xl"></div>
 
                         <img
                             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200"
@@ -93,7 +99,7 @@ export default function Welcome({ products }: Props) {
                         />
 
                         <div className="absolute -bottom-5 left-5 rounded-2xl bg-white p-5 shadow-xl md:left-[-25px]">
-                            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+                            <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
                                 Shopping made easy
                             </p>
                             <p className="mt-1 text-lg font-black">
@@ -110,8 +116,12 @@ export default function Welcome({ products }: Props) {
                     <div className="flex items-center gap-4">
                         <span className="text-3xl">🚚</span>
                         <div>
-                            <h3 className="font-bold">Fast & Convenient Delivery</h3>
-                            <p className="text-sm text-gray-500">Delivered right to your doorstep</p>
+                            <h3 className="font-bold">
+                                Fast & Convenient Delivery
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                                Delivered right to your doorstep
+                            </p>
                         </div>
                     </div>
 
@@ -119,7 +129,9 @@ export default function Welcome({ products }: Props) {
                         <span className="text-3xl">🔒</span>
                         <div>
                             <h3 className="font-bold">Secure Transactions</h3>
-                            <p className="text-sm text-gray-500">Shop with peace of mind</p>
+                            <p className="text-sm text-gray-500">
+                                Shop with peace of mind
+                            </p>
                         </div>
                     </div>
 
@@ -127,7 +139,9 @@ export default function Welcome({ products }: Props) {
                         <span className="text-3xl">💬</span>
                         <div>
                             <h3 className="font-bold">Dedicated Support</h3>
-                            <p className="text-sm text-gray-500">Always here to help you</p>
+                            <p className="text-sm text-gray-500">
+                                Always here to help you
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -137,14 +151,15 @@ export default function Welcome({ products }: Props) {
             <section id="featured" className="mx-auto max-w-7xl px-6 py-20">
                 <div className="mb-12 flex flex-wrap items-end justify-between gap-5">
                     <div>
-                        <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-[#969b60]">
+                        <p className="mb-3 text-xs font-bold tracking-[0.25em] text-[#969b60] uppercase">
                             Our Collection
                         </p>
                         <h2 className="text-3xl font-black md:text-4xl">
                             Featured Products
                         </h2>
                         <p className="mt-3 text-gray-500">
-                            Explore our latest and most popular items ready to purchase today.
+                            Explore our latest and most popular items ready to
+                            purchase today.
                         </p>
                     </div>
 
@@ -174,7 +189,7 @@ export default function Welcome({ products }: Props) {
                                             className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                                         />
 
-                                        <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#777c4d] shadow-sm backdrop-blur-sm">
+                                        <span className="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#777c4d] shadow-sm backdrop-blur-sm">
                                             Featured
                                         </span>
                                     </div>
@@ -214,7 +229,9 @@ export default function Welcome({ products }: Props) {
                                                     { preserveScroll: true },
                                                 )
                                             }
-                                            disabled={product.stock_quantity < 1}
+                                            disabled={
+                                                product.stock_quantity < 1
+                                            }
                                             className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[#252820] px-3 py-2.5 text-xs font-bold text-white transition hover:bg-[#8b9060] disabled:cursor-not-allowed disabled:opacity-50"
                                         >
                                             <ShoppingBag className="h-3.5 w-3.5" />
@@ -230,7 +247,8 @@ export default function Welcome({ products }: Props) {
                                 No featured products yet
                             </h3>
                             <p className="mt-2 text-gray-500">
-                                Products will appear here once they are added to your store.
+                                Products will appear here once they are added to
+                                your store.
                             </p>
                             <Link
                                 href="/shop"
@@ -247,11 +265,11 @@ export default function Welcome({ products }: Props) {
             <section id="about" className="bg-[#252820] px-6 py-20 text-white">
                 <div className="mx-auto grid max-w-7xl items-center gap-12 md:grid-cols-2">
                     <div>
-                        <p className="mb-4 text-xs font-bold uppercase tracking-[0.25em] text-[#c3c69a]">
+                        <p className="mb-4 text-xs font-bold tracking-[0.25em] text-[#c3c69a] uppercase">
                             Shopping with us
                         </p>
 
-                        <h2 className="text-4xl font-black leading-tight md:text-5xl">
+                        <h2 className="text-4xl leading-tight font-black md:text-5xl">
                             More than just shopping.
                             <span className="block text-[#c3c69a]">
                                 It's an experience.
@@ -259,10 +277,10 @@ export default function Welcome({ products }: Props) {
                         </h2>
 
                         <p className="mt-6 max-w-lg leading-8 text-gray-300">
-                            We believe finding the products you need should
-                            be easy, seamless and enjoyable. Browse our curated collection,
-                            discover your favourites and enjoy speedy checkout from the
-                            comfort of your home.
+                            We believe finding the products you need should be
+                            easy, seamless and enjoyable. Browse our curated
+                            collection, discover your favourites and enjoy
+                            speedy checkout from the comfort of your home.
                         </p>
 
                         <Link
@@ -282,8 +300,11 @@ export default function Welcome({ products }: Props) {
             </section>
 
             {/* CALL TO ACTION */}
-            <section id="contact" className="bg-[#eeeee5] px-6 py-20 text-center">
-                <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#969b60]">
+            <section
+                id="contact"
+                className="bg-[#eeeee5] px-6 py-20 text-center"
+            >
+                <p className="text-xs font-bold tracking-[0.25em] text-[#969b60] uppercase">
                     Don't miss out
                 </p>
 
@@ -292,7 +313,8 @@ export default function Welcome({ products }: Props) {
                 </h2>
 
                 <p className="mx-auto mt-4 max-w-xl text-gray-600">
-                    Explore our complete catalog across clothing, electronics, beauty, home and accessories.
+                    Explore our complete catalog across clothing, electronics,
+                    beauty, home and accessories.
                 </p>
 
                 <Link

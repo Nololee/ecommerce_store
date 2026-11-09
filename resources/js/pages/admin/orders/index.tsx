@@ -64,7 +64,11 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
     const [status, setStatus] = useState(filters.status);
     const [paymentStatus, setPaymentStatus] = useState(filters.payment_status);
 
-    const handleFilter = (newSearch: string, newStatus: string, newPay: string) => {
+    const handleFilter = (
+        newSearch: string,
+        newStatus: string,
+        newPay: string,
+    ) => {
         router.get(
             '/admin/orders',
             { search: newSearch, status: newStatus, payment_status: newPay },
@@ -84,13 +88,14 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
             <Head title="Orders Management | Admin" />
 
             {/* Header */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-5">
+            <div className="flex flex-col gap-4 border-b border-stone-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-black tracking-tight text-stone-900">
                         Orders & Fulfillment
                     </h1>
                     <p className="mt-1 text-xs text-stone-500">
-                        Track orders, update fulfillment statuses, process deliveries, and review payment validations.
+                        Track orders, update fulfillment statuses, process
+                        deliveries, and review payment validations.
                     </p>
                 </div>
             </div>
@@ -98,7 +103,7 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
             {/* Filter controls */}
             <div className="grid grid-cols-1 gap-3 rounded-2xl border border-stone-200/80 bg-white p-4 shadow-2xs sm:grid-cols-4">
                 <div className="relative sm:col-span-2">
-                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                    <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400" />
                     <input
                         type="text"
                         value={search}
@@ -109,7 +114,7 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                                 handleFilter(search, status, paymentStatus);
                             }
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 pl-9 pr-4 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 py-2 pr-4 pl-9 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     />
                 </div>
 
@@ -120,7 +125,7 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                             setStatus(e.target.value);
                             handleFilter(search, e.target.value, paymentStatus);
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     >
                         <option value="">All Fulfillment Statuses</option>
                         <option value="pending">Pending</option>
@@ -138,7 +143,7 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                             setPaymentStatus(e.target.value);
                             handleFilter(search, status, e.target.value);
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     >
                         <option value="">All Payment Statuses</option>
                         <option value="paid">Paid</option>
@@ -150,10 +155,10 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
             </div>
 
             {/* Orders Table */}
-            <div className="rounded-2xl border border-stone-200/80 bg-white shadow-2xs overflow-hidden">
+            <div className="overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-2xs">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
-                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold tracking-wider text-stone-600 uppercase">
                             <tr>
                                 <th className="px-4 py-3">Order Number</th>
                                 <th className="px-4 py-3">Customer</th>
@@ -161,40 +166,60 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                                 <th className="px-4 py-3">Total Amount</th>
                                 <th className="px-4 py-3">Payment</th>
                                 <th className="px-4 py-3">Status</th>
-                                <th className="px-4 py-3 text-right">Actions</th>
+                                <th className="px-4 py-3 text-right">
+                                    Actions
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-stone-100">
                             {orders.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={7} className="py-12 text-center text-stone-400">
-                                        No order records found matching criteria.
+                                    <td
+                                        colSpan={7}
+                                        className="py-12 text-center text-stone-400"
+                                    >
+                                        No order records found matching
+                                        criteria.
                                     </td>
                                 </tr>
                             ) : (
                                 orders.data.map((order) => (
-                                    <tr key={order.id} className="hover:bg-stone-50/50 transition">
+                                    <tr
+                                        key={order.id}
+                                        className="transition hover:bg-stone-50/50"
+                                    >
                                         <td className="px-4 py-3 font-mono font-bold text-stone-900">
                                             {order.tracking_number}
                                         </td>
                                         <td className="px-4 py-3">
-                                            <p className="font-semibold text-stone-900">{order.customer_name}</p>
-                                            <p className="text-[11px] text-stone-400">{order.customer_email}</p>
+                                            <p className="font-semibold text-stone-900">
+                                                {order.customer_name}
+                                            </p>
+                                            <p className="text-[11px] text-stone-400">
+                                                {order.customer_email}
+                                            </p>
                                         </td>
                                         <td className="px-4 py-3 text-stone-600">
-                                            {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                                            {order.items.length}{' '}
+                                            {order.items.length === 1
+                                                ? 'item'
+                                                : 'items'}
                                         </td>
                                         <td className="px-4 py-3 font-bold text-stone-900">
-                                            {formatCurrency(Number(order.total_amount))}
+                                            {formatCurrency(
+                                                Number(order.total_amount),
+                                            )}
                                         </td>
                                         <td className="px-4 py-3">
                                             <span
                                                 className={`inline-flex rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                                                    order.payment_status === 'paid'
-                                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                                        : order.payment_status === 'failed'
-                                                        ? 'bg-red-50 text-red-700 border border-red-200'
-                                                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                                                    order.payment_status ===
+                                                    'paid'
+                                                        ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                                                        : order.payment_status ===
+                                                            'failed'
+                                                          ? 'border border-red-200 bg-red-50 text-red-700'
+                                                          : 'border border-amber-200 bg-amber-50 text-amber-700'
                                                 }`}
                                             >
                                                 {order.payment_status.toUpperCase()}
@@ -205,13 +230,16 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                                                 className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
                                                     order.status === 'delivered'
                                                         ? 'bg-emerald-50 text-emerald-700'
-                                                        : order.status === 'cancelled'
-                                                        ? 'bg-red-50 text-red-700'
-                                                        : order.status === 'shipped'
-                                                        ? 'bg-purple-50 text-purple-700'
-                                                        : order.status === 'processing'
-                                                        ? 'bg-blue-50 text-blue-700'
-                                                        : 'bg-amber-50 text-amber-700'
+                                                        : order.status ===
+                                                            'cancelled'
+                                                          ? 'bg-red-50 text-red-700'
+                                                          : order.status ===
+                                                              'shipped'
+                                                            ? 'bg-purple-50 text-purple-700'
+                                                            : order.status ===
+                                                                'processing'
+                                                              ? 'bg-blue-50 text-blue-700'
+                                                              : 'bg-amber-50 text-amber-700'
                                                 }`}
                                             >
                                                 {order.status.toUpperCase()}
@@ -220,7 +248,7 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                                         <td className="px-4 py-3 text-right">
                                             <Link
                                                 href={`/admin/orders/${order.id}`}
-                                                className="rounded-lg bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-800 hover:bg-[#8b9060] hover:text-white transition"
+                                                className="rounded-lg bg-stone-100 px-3 py-1.5 text-xs font-bold text-stone-800 transition hover:bg-[#8b9060] hover:text-white"
                                             >
                                                 View Order
                                             </Link>
@@ -248,10 +276,12 @@ export default function AdminOrdersIndex({ orders, filters }: Props) {
                                         link.active
                                             ? 'bg-[#8b9060] text-white'
                                             : link.url
-                                            ? 'text-stone-600 hover:bg-stone-200'
-                                            : 'text-stone-300 pointer-events-none'
+                                              ? 'text-stone-600 hover:bg-stone-200'
+                                              : 'pointer-events-none text-stone-300'
                                     }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             ))}
                         </div>

@@ -79,12 +79,14 @@ export default function OrderShow({ order }: Props) {
         }
 
         if (stepKey === 'processing') {
-            if (['processing', 'shipped', 'delivered'].includes(order.status)) return 'completed';
+            if (['processing', 'shipped', 'delivered'].includes(order.status))
+                return 'completed';
             return 'pending';
         }
 
         if (stepKey === 'shipped') {
-            if (['shipped', 'delivered'].includes(order.status)) return 'completed';
+            if (['shipped', 'delivered'].includes(order.status))
+                return 'completed';
             return 'pending';
         }
 
@@ -117,13 +119,16 @@ export default function OrderShow({ order }: Props) {
                             </h1>
 
                             <p className="mt-1 text-sm text-stone-500">
-                                Placed on {order.created_at} • Payment: <span className="font-bold uppercase text-stone-700">{order.payment_status}</span>
+                                Placed on {order.created_at} • Payment:{' '}
+                                <span className="font-bold text-stone-700 uppercase">
+                                    {order.payment_status}
+                                </span>
                             </p>
                         </div>
 
                         <div className="flex items-center gap-2">
                             <span
-                                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider ${
+                                className={`rounded-full px-4 py-1.5 text-xs font-bold tracking-wider uppercase ${
                                     order.status === 'delivered'
                                         ? 'bg-emerald-100 text-emerald-800'
                                         : order.status === 'shipped'
@@ -141,8 +146,8 @@ export default function OrderShow({ order }: Props) {
                     </div>
 
                     {/* Visual Progress Timeline */}
-                    <div className="mb-10 rounded-3xl border border-stone-200 bg-white p-6 sm:p-8 shadow-sm">
-                        <h2 className="mb-6 text-sm font-bold uppercase tracking-wider text-stone-400">
+                    <div className="mb-10 rounded-3xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
+                        <h2 className="mb-6 text-sm font-bold tracking-wider text-stone-400 uppercase">
                             Fulfillment Journey
                         </h2>
 
@@ -153,7 +158,10 @@ export default function OrderShow({ order }: Props) {
                                 const StepIcon = step.icon;
 
                                 return (
-                                    <div key={step.key} className="flex flex-col items-center text-center">
+                                    <div
+                                        key={step.key}
+                                        className="flex flex-col items-center text-center"
+                                    >
                                         <div
                                             className={`flex h-12 w-12 items-center justify-center rounded-full transition ${
                                                 isCompleted
@@ -166,7 +174,9 @@ export default function OrderShow({ order }: Props) {
 
                                         <p
                                             className={`mt-2 text-xs font-bold ${
-                                                isCompleted ? 'text-stone-900' : 'text-stone-400'
+                                                isCompleted
+                                                    ? 'text-stone-900'
+                                                    : 'text-stone-400'
                                             }`}
                                         >
                                             {step.label}
@@ -174,7 +184,8 @@ export default function OrderShow({ order }: Props) {
 
                                         {isCompleted && (
                                             <span className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
-                                                <Check className="h-3 w-3" /> Done
+                                                <Check className="h-3 w-3" />{' '}
+                                                Done
                                             </span>
                                         )}
                                     </div>
@@ -190,14 +201,22 @@ export default function OrderShow({ order }: Props) {
                             <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
                                 <h2 className="flex items-center gap-2 text-lg font-bold text-stone-900">
                                     <ShoppingBag className="h-5 w-5 text-[#8b9060]" />
-                                    <span>Purchased Products ({order.items.length})</span>
+                                    <span>
+                                        Purchased Products ({order.items.length}
+                                        )
+                                    </span>
                                 </h2>
 
                                 <div className="mt-6 divide-y divide-stone-100">
                                     {order.items.map((item) => (
-                                        <div key={item.id} className="flex items-center gap-4 py-4">
+                                        <div
+                                            key={item.id}
+                                            className="flex items-center gap-4 py-4"
+                                        >
                                             <img
-                                                src={getProductImage(item.product_image)}
+                                                src={getProductImage(
+                                                    item.product_image,
+                                                )}
                                                 alt={item.product_name}
                                                 className="h-16 w-16 rounded-xl object-cover"
                                             />
@@ -211,17 +230,22 @@ export default function OrderShow({ order }: Props) {
                                                         {item.product_name}
                                                     </Link>
                                                 ) : (
-                                                    <p className="font-bold text-stone-900">{item.product_name}</p>
+                                                    <p className="font-bold text-stone-900">
+                                                        {item.product_name}
+                                                    </p>
                                                 )}
 
                                                 <p className="mt-1 text-xs text-stone-500">
-                                                    Qty: {item.quantity} × {formatPrice(item.price)}
+                                                    Qty: {item.quantity} ×{' '}
+                                                    {formatPrice(item.price)}
                                                 </p>
                                             </div>
 
                                             <div className="text-right">
                                                 <span className="font-black text-stone-900">
-                                                    {formatPrice(item.line_total)}
+                                                    {formatPrice(
+                                                        item.line_total,
+                                                    )}
                                                 </span>
                                             </div>
                                         </div>
@@ -232,17 +256,25 @@ export default function OrderShow({ order }: Props) {
                                 <div className="mt-6 space-y-2.5 border-t border-stone-100 pt-5 text-sm text-stone-600">
                                     <div className="flex justify-between">
                                         <span>Subtotal</span>
-                                        <span className="font-semibold text-stone-900">{formatPrice(order.subtotal)}</span>
+                                        <span className="font-semibold text-stone-900">
+                                            {formatPrice(order.subtotal)}
+                                        </span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Shipping & Handling</span>
                                         <span className="font-semibold text-stone-900">
-                                            {order.shipping_fee > 0 ? formatPrice(order.shipping_fee) : 'FREE'}
+                                            {order.shipping_fee > 0
+                                                ? formatPrice(
+                                                      order.shipping_fee,
+                                                  )
+                                                : 'FREE'}
                                         </span>
                                     </div>
                                     <div className="flex justify-between border-t border-stone-200 pt-3 text-base font-black text-stone-900">
                                         <span>Total Paid / Due</span>
-                                        <span className="text-xl">{formatPrice(order.total_amount)}</span>
+                                        <span className="text-xl">
+                                            {formatPrice(order.total_amount)}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -252,21 +284,27 @@ export default function OrderShow({ order }: Props) {
                         <div className="space-y-6">
                             {/* Customer Details */}
                             <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
-                                <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-stone-400">
+                                <h3 className="flex items-center gap-2 text-sm font-bold tracking-wider text-stone-400 uppercase">
                                     <User className="h-4 w-4 text-[#8b9060]" />
                                     <span>Recipient</span>
                                 </h3>
 
                                 <div className="mt-3 text-sm">
-                                    <p className="font-bold text-stone-900">{order.customer_name}</p>
-                                    <p className="text-stone-500">{order.customer_email}</p>
-                                    <p className="text-stone-500">{order.customer_phone}</p>
+                                    <p className="font-bold text-stone-900">
+                                        {order.customer_name}
+                                    </p>
+                                    <p className="text-stone-500">
+                                        {order.customer_email}
+                                    </p>
+                                    <p className="text-stone-500">
+                                        {order.customer_phone}
+                                    </p>
                                 </div>
                             </div>
 
                             {/* Delivery Address */}
                             <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
-                                <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-stone-400">
+                                <h3 className="flex items-center gap-2 text-sm font-bold tracking-wider text-stone-400 uppercase">
                                     <MapPin className="h-4 w-4 text-[#8b9060]" />
                                     <span>Destination</span>
                                 </h3>
@@ -277,7 +315,7 @@ export default function OrderShow({ order }: Props) {
                                         {order.city}, {order.postal_code}
                                     </p>
                                     {order.notes && (
-                                        <p className="mt-2 rounded-lg bg-stone-50 p-2 text-xs italic text-stone-500">
+                                        <p className="mt-2 rounded-lg bg-stone-50 p-2 text-xs text-stone-500 italic">
                                             Notes: {order.notes}
                                         </p>
                                     )}
@@ -286,7 +324,7 @@ export default function OrderShow({ order }: Props) {
 
                             {/* Payment Summary */}
                             <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm">
-                                <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-stone-400">
+                                <h3 className="flex items-center gap-2 text-sm font-bold tracking-wider text-stone-400 uppercase">
                                     <CreditCard className="h-4 w-4 text-[#8b9060]" />
                                     <span>Payment Info</span>
                                 </h3>
@@ -294,13 +332,16 @@ export default function OrderShow({ order }: Props) {
                                 <div className="mt-3 space-y-1.5 text-xs text-stone-600">
                                     <div className="flex justify-between">
                                         <span>Method:</span>
-                                        <span className="font-semibold uppercase text-stone-900">
-                                            {order.payment_method.replace('_', ' ')}
+                                        <span className="font-semibold text-stone-900 uppercase">
+                                            {order.payment_method.replace(
+                                                '_',
+                                                ' ',
+                                            )}
                                         </span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Status:</span>
-                                        <span className="font-bold uppercase text-emerald-700">
+                                        <span className="font-bold text-emerald-700 uppercase">
                                             {order.payment_status}
                                         </span>
                                     </div>
@@ -317,7 +358,7 @@ export default function OrderShow({ order }: Props) {
 
                             <Link
                                 href="/shop"
-                                className="block w-full rounded-2xl bg-[#252820] py-3.5 text-center text-xs font-bold uppercase tracking-wider text-white shadow-md transition hover:bg-[#8b9060]"
+                                className="block w-full rounded-2xl bg-[#252820] py-3.5 text-center text-xs font-bold tracking-wider text-white uppercase shadow-md transition hover:bg-[#8b9060]"
                             >
                                 Continue Shopping
                             </Link>

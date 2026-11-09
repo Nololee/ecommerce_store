@@ -118,5 +118,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
     ->middleware(['auth', EnsureTeamMembership::class])
     ->name('team-invitations.accept');
+Route::post('/team-invitations/{invitation}/decline', [TeamInvitationController::class, 'decline'])
+    ->middleware(['auth', EnsureTeamMembership::class])
+    ->name('team-invitations.decline');
 
 require __DIR__.'/settings.php';

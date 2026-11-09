@@ -38,7 +38,8 @@ type SharedProps = {
 export default function AdminLayout({ children }: { children: ReactNode }) {
     const { auth, flash } = usePage<SharedProps>().props;
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const currentUrl = typeof window !== 'undefined' ? window.location.pathname : '';
+    const currentUrl =
+        typeof window !== 'undefined' ? window.location.pathname : '';
 
     const navigationSections = [
         {
@@ -143,12 +144,16 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="font-black text-base tracking-tight text-white">ARENOLO</span>
-                                <span className="rounded bg-[#8b9060]/30 px-1.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#d1d5a7]">
+                                <span className="text-base font-black tracking-tight text-white">
+                                    ARENOLO
+                                </span>
+                                <span className="rounded bg-[#8b9060]/30 px-1.5 py-0.5 text-[10px] font-extrabold tracking-wide text-[#d1d5a7] uppercase">
                                     Admin
                                 </span>
                             </div>
-                            <p className="text-[11px] text-stone-400">Back-Office Command Center</p>
+                            <p className="text-[11px] text-stone-400">
+                                Back-Office Command Center
+                            </p>
                         </div>
                     </Link>
 
@@ -162,10 +167,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 </div>
 
                 {/* Navigation Sections */}
-                <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
+                <div className="flex-1 space-y-6 overflow-y-auto px-4 py-5">
                     {navigationSections.map((section) => (
                         <div key={section.title} className="space-y-1">
-                            <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-stone-500">
+                            <p className="px-3 text-[10px] font-extrabold tracking-wider text-stone-500 uppercase">
                                 {section.title}
                             </p>
                             {section.links.map((link) => {
@@ -179,11 +184,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                                         onClick={() => setSidebarOpen(false)}
                                         className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
                                             active
-                                                ? 'bg-[#8b9060] text-white shadow-sm font-bold'
+                                                ? 'bg-[#8b9060] font-bold text-white shadow-sm'
                                                 : 'text-stone-300 hover:bg-stone-800/80 hover:text-white'
                                         }`}
                                     >
-                                        <Icon className={`h-4 w-4 ${active ? 'text-white' : 'text-stone-400'}`} />
+                                        <Icon
+                                            className={`h-4 w-4 ${active ? 'text-white' : 'text-stone-400'}`}
+                                        />
                                         <span>{link.name}</span>
                                     </Link>
                                 );
@@ -191,8 +198,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                         </div>
                     ))}
 
-                    <div className="pt-2 border-t border-stone-800/60">
-                        <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-stone-500">
+                    <div className="border-t border-stone-800/60 pt-2">
+                        <p className="px-3 text-[10px] font-extrabold tracking-wider text-stone-500 uppercase">
                             Storefront
                         </p>
                         <Link
@@ -208,7 +215,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 </div>
 
                 {/* Footer User Info & Logout */}
-                <div className="border-t border-stone-800/80 p-4 bg-[#121310]">
+                <div className="border-t border-stone-800/80 bg-[#121310] p-4">
                     <div className="flex items-center justify-between">
                         <div className="truncate">
                             <p className="truncate text-xs font-bold text-white">
@@ -222,7 +229,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                             href="/logout"
                             method="post"
                             as="button"
-                            className="rounded-lg p-2 text-stone-400 hover:bg-stone-800 hover:text-red-400 transition"
+                            className="rounded-lg p-2 text-stone-400 transition hover:bg-stone-800 hover:text-red-400"
                             title="Sign out of Admin"
                         >
                             <LogOut className="h-4 w-4" />
@@ -244,8 +251,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                             <Menu className="h-5 w-5" />
                         </button>
                         <div className="hidden sm:block">
-                            <span className="text-xs font-medium text-stone-500">System Environment:</span>{' '}
-                            <span className="rounded bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-200">
+                            <span className="text-xs font-medium text-stone-500">
+                                System Environment:
+                            </span>{' '}
+                            <span className="rounded border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
                                 Operational &bull; Production Mode
                             </span>
                         </div>
@@ -253,8 +262,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
                     <div className="flex items-center gap-4">
                         <div className="text-right">
-                            <p className="text-xs font-bold text-stone-900">{auth?.user?.name}</p>
-                            <p className="text-[11px] text-stone-500 font-medium">Administrator Privilege</p>
+                            <p className="text-xs font-bold text-stone-900">
+                                {auth?.user?.name}
+                            </p>
+                            <p className="text-[11px] font-medium text-stone-500">
+                                Administrator Privilege
+                            </p>
                         </div>
                         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#8b9060]/20 font-bold text-[#676c3f]">
                             {auth?.user?.name?.[0] ?? 'A'}
@@ -264,13 +277,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
                 {/* Flash Messages */}
                 {flash?.success && (
-                    <div className="border-b border-emerald-200 bg-emerald-50 px-6 py-3 text-xs font-semibold text-emerald-800 flex items-center gap-2">
+                    <div className="flex items-center gap-2 border-b border-emerald-200 bg-emerald-50 px-6 py-3 text-xs font-semibold text-emerald-800">
                         <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                         <span>{flash.success}</span>
                     </div>
                 )}
                 {flash?.error && (
-                    <div className="border-b border-red-200 bg-red-50 px-6 py-3 text-xs font-semibold text-red-800 flex items-center gap-2">
+                    <div className="flex items-center gap-2 border-b border-red-200 bg-red-50 px-6 py-3 text-xs font-semibold text-red-800">
                         <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
                         <span>{flash.error}</span>
                     </div>

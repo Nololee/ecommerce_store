@@ -34,10 +34,7 @@ export default function StoreNavbar() {
 
                 {/* Desktop Navigation */}
                 <nav className="hidden items-center gap-7 text-sm font-medium text-stone-700 md:flex">
-                    <Link
-                        href="/"
-                        className="transition hover:text-[#8b9060]"
-                    >
+                    <Link href="/" className="transition hover:text-[#8b9060]">
                         Home
                     </Link>
                     <Link
@@ -78,7 +75,7 @@ export default function StoreNavbar() {
                         <ShoppingBag className="h-4 w-4" />
                         <span className="hidden sm:inline">Cart</span>
                         {Number(cartCount) > 0 ? (
-                            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#8b9060] px-1.5 text-xs font-bold text-white transition-transform animate-in zoom-in">
+                            <span className="flex h-5 min-w-5 animate-in items-center justify-center rounded-full bg-[#8b9060] px-1.5 text-xs font-bold text-white transition-transform zoom-in">
                                 {cartCount}
                             </span>
                         ) : (
@@ -129,7 +126,11 @@ export default function StoreNavbar() {
                         className="rounded-lg p-2 text-stone-700 hover:bg-stone-100 md:hidden"
                         aria-label="Toggle navigation menu"
                     >
-                        {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                        {mobileMenuOpen ? (
+                            <X className="h-6 w-6" />
+                        ) : (
+                            <Menu className="h-6 w-6" />
+                        )}
                     </button>
                 </div>
             </div>

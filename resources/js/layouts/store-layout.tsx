@@ -32,9 +32,7 @@ export default function StoreLayout({ children }: { children: ReactNode }) {
         <div className="flex min-h-screen flex-col bg-[#faf9f6] text-[#252820]">
             <StoreNavbar />
 
-            <main className="flex-1">
-                {children}
-            </main>
+            <main className="flex-1">{children}</main>
 
             <StoreFooter />
         </div>

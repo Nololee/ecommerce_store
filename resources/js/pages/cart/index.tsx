@@ -47,7 +47,11 @@ export default function CartIndex({ items, subtotal }: Props) {
 
     const formatPrice = (price: number) => `R${Number(price).toFixed(2)}`;
 
-    const handleUpdateQuantity = (productId: number, newQuantity: number, maxStock: number) => {
+    const handleUpdateQuantity = (
+        productId: number,
+        newQuantity: number,
+        maxStock: number,
+    ) => {
         if (newQuantity < 1 || newQuantity > maxStock) return;
 
         setUpdatingId(productId);
@@ -84,14 +88,16 @@ export default function CartIndex({ items, subtotal }: Props) {
                     {/* Header */}
                     <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#8b9060]">
+                            <p className="text-xs font-bold tracking-[0.25em] text-[#8b9060] uppercase">
                                 Your Shopping Bag
                             </p>
                             <h1 className="mt-2 text-4xl font-black sm:text-5xl">
                                 Shopping Cart
                             </h1>
                             <p className="mt-2 text-sm text-stone-500">
-                                {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
+                                {items.length}{' '}
+                                {items.length === 1 ? 'item' : 'items'} in your
+                                cart
                             </p>
                         </div>
 
@@ -118,7 +124,9 @@ export default function CartIndex({ items, subtotal }: Props) {
                             </h2>
 
                             <p className="mx-auto mt-2 max-w-md text-stone-500">
-                                Looks like you haven't added anything to your cart yet. Explore our store to find products you'll love!
+                                Looks like you haven't added anything to your
+                                cart yet. Explore our store to find products
+                                you'll love!
                             </p>
 
                             <Link
@@ -144,7 +152,9 @@ export default function CartIndex({ items, subtotal }: Props) {
                                             className="h-32 w-full shrink-0 overflow-hidden rounded-xl bg-stone-100 sm:w-32"
                                         >
                                             <img
-                                                src={getProductImage(item.image)}
+                                                src={getProductImage(
+                                                    item.image,
+                                                )}
                                                 alt={item.name}
                                                 className="h-full w-full object-cover transition hover:scale-105"
                                             />
@@ -163,7 +173,11 @@ export default function CartIndex({ items, subtotal }: Props) {
 
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleRemoveItem(item.id)}
+                                                        onClick={() =>
+                                                            handleRemoveItem(
+                                                                item.id,
+                                                            )
+                                                        }
                                                         className="text-stone-400 hover:text-red-600"
                                                         title="Remove from cart"
                                                     >
@@ -172,11 +186,15 @@ export default function CartIndex({ items, subtotal }: Props) {
                                                 </div>
 
                                                 <p className="mt-1 text-sm font-semibold text-stone-600">
-                                                    {formatPrice(Number(item.price))} each
+                                                    {formatPrice(
+                                                        Number(item.price),
+                                                    )}{' '}
+                                                    each
                                                 </p>
 
                                                 <p className="mt-1 text-xs text-stone-400">
-                                                    {item.stock_quantity} available in stock
+                                                    {item.stock_quantity}{' '}
+                                                    available in stock
                                                 </p>
                                             </div>
 
@@ -190,11 +208,17 @@ export default function CartIndex({ items, subtotal }: Props) {
                                                     <div className="flex items-center rounded-lg border border-stone-200 bg-stone-50">
                                                         <button
                                                             type="button"
-                                                            disabled={item.quantity <= 1 || updatingId === item.id}
+                                                            disabled={
+                                                                item.quantity <=
+                                                                    1 ||
+                                                                updatingId ===
+                                                                    item.id
+                                                            }
                                                             onClick={() =>
                                                                 handleUpdateQuantity(
                                                                     item.id,
-                                                                    item.quantity - 1,
+                                                                    item.quantity -
+                                                                        1,
                                                                     item.stock_quantity,
                                                                 )
                                                             }
@@ -211,13 +235,16 @@ export default function CartIndex({ items, subtotal }: Props) {
                                                         <button
                                                             type="button"
                                                             disabled={
-                                                                item.quantity >= item.stock_quantity ||
-                                                                updatingId === item.id
+                                                                item.quantity >=
+                                                                    item.stock_quantity ||
+                                                                updatingId ===
+                                                                    item.id
                                                             }
                                                             onClick={() =>
                                                                 handleUpdateQuantity(
                                                                     item.id,
-                                                                    item.quantity + 1,
+                                                                    item.quantity +
+                                                                        1,
                                                                     item.stock_quantity,
                                                                 )
                                                             }
@@ -231,7 +258,9 @@ export default function CartIndex({ items, subtotal }: Props) {
 
                                                 <div className="text-right">
                                                     <span className="text-base font-black text-[#252820]">
-                                                        {formatPrice(item.line_total)}
+                                                        {formatPrice(
+                                                            item.line_total,
+                                                        )}
                                                     </span>
                                                 </div>
                                             </div>
@@ -258,23 +287,37 @@ export default function CartIndex({ items, subtotal }: Props) {
 
                                 <div className="mt-6 space-y-3 border-b border-stone-200 pb-5 text-sm">
                                     <div className="flex justify-between text-stone-600">
-                                        <span>Subtotal ({items.reduce((acc, i) => acc + i.quantity, 0)} items)</span>
-                                        <span className="font-semibold text-stone-900">{formatPrice(subtotal)}</span>
+                                        <span>
+                                            Subtotal (
+                                            {items.reduce(
+                                                (acc, i) => acc + i.quantity,
+                                                0,
+                                            )}{' '}
+                                            items)
+                                        </span>
+                                        <span className="font-semibold text-stone-900">
+                                            {formatPrice(subtotal)}
+                                        </span>
                                     </div>
 
                                     <div className="flex justify-between text-stone-600">
                                         <span>Estimated Shipping</span>
-                                        <span className="font-semibold text-emerald-700">Calculated at checkout</span>
+                                        <span className="font-semibold text-emerald-700">
+                                            Calculated at checkout
+                                        </span>
                                     </div>
                                 </div>
 
                                 <div className="mt-5 flex items-baseline justify-between text-lg font-black text-[#252820]">
                                     <span>Total Amount</span>
-                                    <span className="text-2xl">{formatPrice(subtotal)}</span>
+                                    <span className="text-2xl">
+                                        {formatPrice(subtotal)}
+                                    </span>
                                 </div>
 
                                 <p className="mt-3 text-xs leading-relaxed text-stone-400">
-                                    Taxes included where applicable. Delivery costs will be confirmed during checkout.
+                                    Taxes included where applicable. Delivery
+                                    costs will be confirmed during checkout.
                                 </p>
 
                                 <div className="mt-6 space-y-3">
@@ -291,14 +334,23 @@ export default function CartIndex({ items, subtotal }: Props) {
                                                 Customer Account Required
                                             </p>
                                             <p className="mt-1 text-stone-500">
-                                                Please sign in or register to complete your order.
+                                                Please sign in or register to
+                                                complete your order.
                                             </p>
                                             <div className="mt-3 flex items-center justify-center gap-3 font-bold">
-                                                <Link href="/login" className="text-[#8b9060] hover:underline">
+                                                <Link
+                                                    href="/login"
+                                                    className="text-[#8b9060] hover:underline"
+                                                >
                                                     Log In
                                                 </Link>
-                                                <span className="text-stone-300">•</span>
-                                                <Link href="/register" className="text-[#8b9060] hover:underline">
+                                                <span className="text-stone-300">
+                                                    •
+                                                </span>
+                                                <Link
+                                                    href="/register"
+                                                    className="text-[#8b9060] hover:underline"
+                                                >
                                                     Create Account
                                                 </Link>
                                             </div>
@@ -308,7 +360,7 @@ export default function CartIndex({ items, subtotal }: Props) {
 
                                 <Link
                                     href="/shop"
-                                    className="mt-4 block text-center text-xs font-bold uppercase tracking-wider text-stone-500 hover:text-[#8b9060]"
+                                    className="mt-4 block text-center text-xs font-bold tracking-wider text-stone-500 uppercase hover:text-[#8b9060]"
                                 >
                                     ← Add More Items
                                 </Link>

@@ -49,11 +49,7 @@ function getProductImage(image: string | null): string {
     return `/storage/${image}`;
 }
 
-export default function ShopIndex({
-    products,
-    categories,
-    filters,
-}: Props) {
+export default function ShopIndex({ products, categories, filters }: Props) {
     return (
         <>
             <Head title="Shop | ARENOLO STORE" />
@@ -62,7 +58,7 @@ export default function ShopIndex({
                 <main className="mx-auto max-w-7xl px-6 py-12">
                     {/* Header */}
                     <div className="mb-10">
-                        <p className="mb-2 text-xs font-bold uppercase tracking-[0.25em] text-[#8b9060]">
+                        <p className="mb-2 text-xs font-bold tracking-[0.25em] text-[#8b9060] uppercase">
                             Explore Our Collection
                         </p>
 
@@ -71,7 +67,9 @@ export default function ShopIndex({
                         </h1>
 
                         <p className="mt-3 max-w-2xl text-base text-stone-600">
-                            Discover quality products across fashion, electronics, beauty, home essentials, and accessories.
+                            Discover quality products across fashion,
+                            electronics, beauty, home essentials, and
+                            accessories.
                         </p>
                     </div>
 
@@ -88,14 +86,14 @@ export default function ShopIndex({
                                 name="search"
                                 defaultValue={filters.search}
                                 placeholder="Search products by name or description..."
-                                className="h-12 w-full rounded-xl border border-stone-200 pl-11 pr-4 outline-none transition focus:border-[#8b9060]"
+                                className="h-12 w-full rounded-xl border border-stone-200 pr-4 pl-11 transition outline-none focus:border-[#8b9060]"
                             />
                         </div>
 
                         <select
                             name="category"
                             defaultValue={filters.category}
-                            className="h-12 rounded-xl border border-stone-200 bg-white px-4 outline-none transition focus:border-[#8b9060]"
+                            className="h-12 rounded-xl border border-stone-200 bg-white px-4 transition outline-none focus:border-[#8b9060]"
                         >
                             <option value="">All Categories</option>
                             {categories.map((category) => (
@@ -147,7 +145,9 @@ export default function ShopIndex({
                     <div className="mb-6 flex items-center justify-between border-b border-stone-200 pb-4">
                         <h2 className="text-xl font-bold">
                             {filters.category
-                                ? categories.find((c) => c.slug === filters.category)?.name ?? 'Products'
+                                ? (categories.find(
+                                      (c) => c.slug === filters.category,
+                                  )?.name ?? 'Products')
                                 : 'All Products'}
                         </h2>
                         <p className="text-sm text-stone-500">
@@ -169,13 +169,16 @@ export default function ShopIndex({
                                     >
                                         <div className="relative aspect-square overflow-hidden bg-stone-100">
                                             <img
-                                                src={getProductImage(product.image)}
+                                                src={getProductImage(
+                                                    product.image,
+                                                )}
                                                 alt={product.name}
                                                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                                             />
 
-                                            <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-[#8b9060] shadow-sm backdrop-blur-sm">
-                                                {product.category?.name ?? 'General'}
+                                            <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-[#8b9060] shadow-sm backdrop-blur-sm">
+                                                {product.category?.name ??
+                                                    'General'}
                                             </span>
                                         </div>
 
@@ -190,7 +193,10 @@ export default function ShopIndex({
 
                                             <div className="mt-4 flex items-center justify-between">
                                                 <span className="text-lg font-black text-[#252820]">
-                                                    R{Number(product.price).toFixed(2)}
+                                                    R
+                                                    {Number(
+                                                        product.price,
+                                                    ).toFixed(2)}
                                                 </span>
 
                                                 <span className="text-xs font-semibold text-stone-400">
@@ -218,10 +224,14 @@ export default function ShopIndex({
                                                     router.post(
                                                         `/cart/items/${product.id}`,
                                                         { quantity: 1 },
-                                                        { preserveScroll: true },
+                                                        {
+                                                            preserveScroll: true,
+                                                        },
                                                     )
                                                 }
-                                                disabled={product.stock_quantity < 1}
+                                                disabled={
+                                                    product.stock_quantity < 1
+                                                }
                                                 className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-[#252820] py-2.5 text-xs font-bold text-white transition hover:bg-[#8b9060] disabled:cursor-not-allowed disabled:opacity-50"
                                             >
                                                 <ShoppingBag className="h-3.5 w-3.5" />
@@ -238,7 +248,8 @@ export default function ShopIndex({
                                 No products found
                             </h3>
                             <p className="mt-2 text-stone-500">
-                                Try adjusting your search keyword or browse a different category.
+                                Try adjusting your search keyword or browse a
+                                different category.
                             </p>
                             <Link
                                 href="/shop"
@@ -262,7 +273,9 @@ export default function ShopIndex({
                                             ? 'border-[#252820] bg-[#252820] text-white'
                                             : 'border-stone-200 bg-white text-stone-700 hover:border-[#8b9060]'
                                     } ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             ))}
                         </div>

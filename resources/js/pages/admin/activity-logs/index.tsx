@@ -52,7 +52,11 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
     const [actorType, setActorType] = useState(filters.actor_type);
     const [activityType, setActivityType] = useState(filters.activity_type);
 
-    const handleFilter = (newSearch: string, newActor: string, newAct: string) => {
+    const handleFilter = (
+        newSearch: string,
+        newActor: string,
+        newAct: string,
+    ) => {
         router.get(
             '/admin/activity-logs',
             { search: newSearch, actor_type: newActor, activity_type: newAct },
@@ -65,13 +69,14 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
             <Head title="Audit Trails & Activity Logs | Admin" />
 
             {/* Header */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-5">
+            <div className="flex flex-col gap-4 border-b border-stone-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-black tracking-tight text-stone-900">
                         Audit Trail & Activity Monitoring
                     </h1>
                     <p className="mt-1 text-xs text-stone-500">
-                        POPIA-compliant monitoring of customer actions and administrative modifications.
+                        POPIA-compliant monitoring of customer actions and
+                        administrative modifications.
                     </p>
                 </div>
             </div>
@@ -79,7 +84,7 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
             {/* Filters */}
             <div className="grid grid-cols-1 gap-3 rounded-2xl border border-stone-200/80 bg-white p-4 shadow-2xs sm:grid-cols-4">
                 <div className="relative sm:col-span-2">
-                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                    <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400" />
                     <input
                         type="text"
                         value={search}
@@ -90,7 +95,7 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
                                 handleFilter(search, actorType, activityType);
                             }
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 pl-9 pr-4 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 py-2 pr-4 pl-9 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     />
                 </div>
 
@@ -101,7 +106,7 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
                             setActorType(e.target.value);
                             handleFilter(search, e.target.value, activityType);
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     >
                         <option value="">All Actors (Customer & Admin)</option>
                         <option value="admin">Administrator Only</option>
@@ -116,26 +121,36 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
                             setActivityType(e.target.value);
                             handleFilter(search, actorType, e.target.value);
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     >
                         <option value="">All Activity Types</option>
-                        <option value="order_status_updated">Order Status Updates</option>
-                        <option value="payment_status_changed">Payment Status Updates</option>
+                        <option value="order_status_updated">
+                            Order Status Updates
+                        </option>
+                        <option value="payment_status_changed">
+                            Payment Status Updates
+                        </option>
                         <option value="product_created">Product Created</option>
                         <option value="product_updated">Product Updated</option>
                         <option value="product_deleted">Product Deleted</option>
-                        <option value="inventory_adjusted">Inventory Adjustments</option>
-                        <option value="category_created">Category Created</option>
-                        <option value="customer_status_updated">Customer Status Changes</option>
+                        <option value="inventory_adjusted">
+                            Inventory Adjustments
+                        </option>
+                        <option value="category_created">
+                            Category Created
+                        </option>
+                        <option value="customer_status_updated">
+                            Customer Status Changes
+                        </option>
                     </select>
                 </div>
             </div>
 
             {/* Logs Table */}
-            <div className="rounded-2xl border border-stone-200/80 bg-white shadow-2xs overflow-hidden">
+            <div className="overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-2xs">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
-                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold tracking-wider text-stone-600 uppercase">
                             <tr>
                                 <th className="px-4 py-3">Timestamp</th>
                                 <th className="px-4 py-3">Actor</th>
@@ -148,43 +163,56 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
                         <tbody className="divide-y divide-stone-100">
                             {logs.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="py-12 text-center text-stone-400">
-                                        No audit entries found matching criteria.
+                                    <td
+                                        colSpan={6}
+                                        className="py-12 text-center text-stone-400"
+                                    >
+                                        No audit entries found matching
+                                        criteria.
                                     </td>
                                 </tr>
                             ) : (
                                 logs.data.map((log) => (
-                                    <tr key={log.id} className="hover:bg-stone-50/50 transition">
-                                        <td className="px-4 py-3 font-mono text-stone-500 text-[11px] whitespace-nowrap">
-                                            {new Date(log.created_at).toLocaleString()}
+                                    <tr
+                                        key={log.id}
+                                        className="transition hover:bg-stone-50/50"
+                                    >
+                                        <td className="px-4 py-3 font-mono text-[11px] whitespace-nowrap text-stone-500">
+                                            {new Date(
+                                                log.created_at,
+                                            ).toLocaleString()}
                                         </td>
                                         <td className="px-4 py-3">
                                             <div className="flex items-center gap-1.5">
                                                 <span
                                                     className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
-                                                        log.actor_type === 'admin'
+                                                        log.actor_type ===
+                                                        'admin'
                                                             ? 'bg-[#8b9060]/20 text-[#676c3f]'
                                                             : 'bg-blue-50 text-blue-700'
                                                     }`}
                                                 >
                                                     {log.actor_type}
                                                 </span>
-                                                <span className="font-semibold text-stone-900 truncate max-w-[120px]">
-                                                    {log.user?.name ?? 'Anonymous'}
+                                                <span className="max-w-[120px] truncate font-semibold text-stone-900">
+                                                    {log.user?.name ??
+                                                        'Anonymous'}
                                                 </span>
                                             </div>
                                         </td>
                                         <td className="px-4 py-3 font-mono text-[11px] text-stone-600">
                                             {log.activity_type}
                                         </td>
-                                        <td className="px-4 py-3 text-stone-900 font-medium">
+                                        <td className="px-4 py-3 font-medium text-stone-900">
                                             {log.description}
                                         </td>
-                                        <td className="px-4 py-3 font-mono text-stone-500 text-[11px]">
+                                        <td className="px-4 py-3 font-mono text-[11px] text-stone-500">
                                             {log.ip_address || 'Local'}
                                         </td>
-                                        <td className="px-4 py-3 font-mono text-[10px] text-stone-500 max-w-xs truncate">
-                                            {log.properties ? JSON.stringify(log.properties) : '-'}
+                                        <td className="max-w-xs truncate px-4 py-3 font-mono text-[10px] text-stone-500">
+                                            {log.properties
+                                                ? JSON.stringify(log.properties)
+                                                : '-'}
                                         </td>
                                     </tr>
                                 ))
@@ -209,10 +237,12 @@ export default function AdminActivityLogsIndex({ logs, filters }: Props) {
                                         link.active
                                             ? 'bg-[#8b9060] text-white'
                                             : link.url
-                                            ? 'text-stone-600 hover:bg-stone-200'
-                                            : 'text-stone-300 pointer-events-none'
+                                              ? 'text-stone-600 hover:bg-stone-200'
+                                              : 'pointer-events-none text-stone-300'
                                     }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             ))}
                         </div>

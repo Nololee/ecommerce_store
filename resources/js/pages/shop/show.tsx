@@ -1,5 +1,13 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { ArrowLeft, Check, Minus, Plus, ShieldCheck, ShoppingBag, Truck } from 'lucide-react';
+import {
+    ArrowLeft,
+    Check,
+    Minus,
+    Plus,
+    ShieldCheck,
+    ShoppingBag,
+    Truck,
+} from 'lucide-react';
 import { useState } from 'react';
 
 type Product = {
@@ -77,7 +85,9 @@ export default function ProductShow({ product }: Props) {
                             </>
                         )}
                         <span>/</span>
-                        <span className="truncate text-stone-900 font-semibold">{product.name}</span>
+                        <span className="truncate font-semibold text-stone-900">
+                            {product.name}
+                        </span>
                     </nav>
 
                     <div className="grid gap-12 lg:grid-cols-2">
@@ -91,7 +101,7 @@ export default function ProductShow({ product }: Props) {
                                 />
 
                                 {product.category && (
-                                    <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3.5 py-1.5 text-xs font-bold text-[#8b9060] shadow-sm backdrop-blur-sm">
+                                    <span className="absolute top-4 left-4 rounded-full bg-white/90 px-3.5 py-1.5 text-xs font-bold text-[#8b9060] shadow-sm backdrop-blur-sm">
                                         {product.category.name}
                                     </span>
                                 )}
@@ -101,7 +111,7 @@ export default function ProductShow({ product }: Props) {
                         {/* Product Info & Actions */}
                         <div className="flex flex-col justify-center">
                             {product.sku && (
-                                <p className="text-xs font-bold uppercase tracking-widest text-stone-400">
+                                <p className="text-xs font-bold tracking-widest text-stone-400 uppercase">
                                     SKU: {product.sku}
                                 </p>
                             )}
@@ -128,21 +138,29 @@ export default function ProductShow({ product }: Props) {
                             </div>
 
                             <p className="mt-6 text-base leading-relaxed text-stone-600">
-                                {product.description || 'No detailed description available for this item.'}
+                                {product.description ||
+                                    'No detailed description available for this item.'}
                             </p>
 
                             {/* Quantity & Add to Cart */}
                             {product.stock_quantity > 0 ? (
                                 <div className="mt-8 space-y-4">
                                     <div className="flex items-center gap-4">
-                                        <label htmlFor="quantity" className="text-sm font-semibold text-stone-700">
+                                        <label
+                                            htmlFor="quantity"
+                                            className="text-sm font-semibold text-stone-700"
+                                        >
                                             Quantity:
                                         </label>
 
                                         <div className="flex items-center rounded-xl border border-stone-300 bg-white">
                                             <button
                                                 type="button"
-                                                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                                                onClick={() =>
+                                                    setQuantity((prev) =>
+                                                        Math.max(1, prev - 1),
+                                                    )
+                                                }
                                                 disabled={quantity <= 1}
                                                 className="p-3 text-stone-600 hover:text-stone-900 disabled:opacity-40"
                                                 aria-label="Decrease quantity"
@@ -156,8 +174,18 @@ export default function ProductShow({ product }: Props) {
 
                                             <button
                                                 type="button"
-                                                onClick={() => setQuantity((prev) => Math.min(product.stock_quantity, prev + 1))}
-                                                disabled={quantity >= product.stock_quantity}
+                                                onClick={() =>
+                                                    setQuantity((prev) =>
+                                                        Math.min(
+                                                            product.stock_quantity,
+                                                            prev + 1,
+                                                        ),
+                                                    )
+                                                }
+                                                disabled={
+                                                    quantity >=
+                                                    product.stock_quantity
+                                                }
                                                 className="p-3 text-stone-600 hover:text-stone-900 disabled:opacity-40"
                                                 aria-label="Increase quantity"
                                             >
@@ -174,7 +202,11 @@ export default function ProductShow({ product }: Props) {
                                             className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#252820] px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-[#8b9060] disabled:cursor-not-allowed disabled:opacity-50"
                                         >
                                             <ShoppingBag className="h-4 w-4" />
-                                            <span>{isAdding ? 'Adding...' : 'Add to Cart'}</span>
+                                            <span>
+                                                {isAdding
+                                                    ? 'Adding...'
+                                                    : 'Add to Cart'}
+                                            </span>
                                         </button>
 
                                         <Link
@@ -187,8 +219,13 @@ export default function ProductShow({ product }: Props) {
                                 </div>
                             ) : (
                                 <div className="mt-8 rounded-2xl border border-red-200 bg-red-50 p-5 text-red-700">
-                                    <p className="font-bold">This item is currently out of stock.</p>
-                                    <p className="mt-1 text-sm text-red-600">Please check back soon or browse our other items.</p>
+                                    <p className="font-bold">
+                                        This item is currently out of stock.
+                                    </p>
+                                    <p className="mt-1 text-sm text-red-600">
+                                        Please check back soon or browse our
+                                        other items.
+                                    </p>
                                 </div>
                             )}
 
@@ -196,11 +233,15 @@ export default function ProductShow({ product }: Props) {
                             <div className="mt-10 grid grid-cols-2 gap-4 border-t border-stone-200 pt-6 text-stone-600">
                                 <div className="flex items-center gap-3">
                                     <Truck className="h-5 w-5 text-[#8b9060]" />
-                                    <span className="text-xs font-semibold">Prompt nationwide shipping</span>
+                                    <span className="text-xs font-semibold">
+                                        Prompt nationwide shipping
+                                    </span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <ShieldCheck className="h-5 w-5 text-[#8b9060]" />
-                                    <span className="text-xs font-semibold">Guaranteed quality & support</span>
+                                    <span className="text-xs font-semibold">
+                                        Guaranteed quality & support
+                                    </span>
                                 </div>
                             </div>
 

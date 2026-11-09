@@ -1,5 +1,11 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { CreditCard, Lock, ShieldCheck, ShoppingBag, Truck } from 'lucide-react';
+import {
+    CreditCard,
+    Lock,
+    ShieldCheck,
+    ShoppingBag,
+    Truck,
+} from 'lucide-react';
 import type { FormEvent } from 'react';
 
 type CartItem = {
@@ -78,17 +84,23 @@ export default function CheckoutIndex({
                                 Cart
                             </Link>
                             <span>/</span>
-                            <span className="font-semibold text-stone-900">Checkout</span>
+                            <span className="font-semibold text-stone-900">
+                                Checkout
+                            </span>
                         </nav>
                         <h1 className="text-3xl font-black sm:text-4xl">
                             Checkout & Payment
                         </h1>
                         <p className="mt-1 text-sm text-stone-500">
-                            Complete your shipping details and simulate your sandbox payment below.
+                            Complete your shipping details and simulate your
+                            sandbox payment below.
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="grid gap-10 lg:grid-cols-[1fr_400px]">
+                    <form
+                        onSubmit={handleSubmit}
+                        className="grid gap-10 lg:grid-cols-[1fr_400px]"
+                    >
                         {/* Left Column: Form Details */}
                         <div className="space-y-8">
                             {/* 1. Customer Information */}
@@ -108,13 +120,20 @@ export default function CheckoutIndex({
                                         <input
                                             type="text"
                                             value={data.customer_name}
-                                            onChange={(e) => setData('customer_name', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'customer_name',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="e.g. Sipho Ndlovu"
                                             required
                                             className="mt-1.5 h-12 w-full rounded-xl border border-stone-200 px-4 text-sm outline-none focus:border-[#8b9060]"
                                         />
                                         {errors.customer_name && (
-                                            <p className="mt-1 text-xs text-red-600">{errors.customer_name}</p>
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {errors.customer_name}
+                                            </p>
                                         )}
                                     </div>
 
@@ -125,13 +144,20 @@ export default function CheckoutIndex({
                                         <input
                                             type="email"
                                             value={data.customer_email}
-                                            onChange={(e) => setData('customer_email', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'customer_email',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="you@example.com"
                                             required
                                             className="mt-1.5 h-12 w-full rounded-xl border border-stone-200 px-4 text-sm outline-none focus:border-[#8b9060]"
                                         />
                                         {errors.customer_email && (
-                                            <p className="mt-1 text-xs text-red-600">{errors.customer_email}</p>
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {errors.customer_email}
+                                            </p>
                                         )}
                                     </div>
 
@@ -142,13 +168,20 @@ export default function CheckoutIndex({
                                         <input
                                             type="tel"
                                             value={data.customer_phone}
-                                            onChange={(e) => setData('customer_phone', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'customer_phone',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="+27 82 123 4567"
                                             required
                                             className="mt-1.5 h-12 w-full rounded-xl border border-stone-200 px-4 text-sm outline-none focus:border-[#8b9060]"
                                         />
                                         {errors.customer_phone && (
-                                            <p className="mt-1 text-xs text-red-600">{errors.customer_phone}</p>
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {errors.customer_phone}
+                                            </p>
                                         )}
                                     </div>
                                 </div>
@@ -171,13 +204,20 @@ export default function CheckoutIndex({
                                         <input
                                             type="text"
                                             value={data.shipping_address}
-                                            onChange={(e) => setData('shipping_address', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'shipping_address',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="123 Nelson Mandela Ave, Apt 4B"
                                             required
                                             className="mt-1.5 h-12 w-full rounded-xl border border-stone-200 px-4 text-sm outline-none focus:border-[#8b9060]"
                                         />
                                         {errors.shipping_address && (
-                                            <p className="mt-1 text-xs text-red-600">{errors.shipping_address}</p>
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {errors.shipping_address}
+                                            </p>
                                         )}
                                     </div>
 
@@ -188,13 +228,17 @@ export default function CheckoutIndex({
                                         <input
                                             type="text"
                                             value={data.city}
-                                            onChange={(e) => setData('city', e.target.value)}
+                                            onChange={(e) =>
+                                                setData('city', e.target.value)
+                                            }
                                             placeholder="Johannesburg / Cape Town"
                                             required
                                             className="mt-1.5 h-12 w-full rounded-xl border border-stone-200 px-4 text-sm outline-none focus:border-[#8b9060]"
                                         />
                                         {errors.city && (
-                                            <p className="mt-1 text-xs text-red-600">{errors.city}</p>
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {errors.city}
+                                            </p>
                                         )}
                                     </div>
 
@@ -205,13 +249,20 @@ export default function CheckoutIndex({
                                         <input
                                             type="text"
                                             value={data.postal_code}
-                                            onChange={(e) => setData('postal_code', e.target.value)}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'postal_code',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="2000"
                                             required
                                             className="mt-1.5 h-12 w-full rounded-xl border border-stone-200 px-4 text-sm outline-none focus:border-[#8b9060]"
                                         />
                                         {errors.postal_code && (
-                                            <p className="mt-1 text-xs text-red-600">{errors.postal_code}</p>
+                                            <p className="mt-1 text-xs text-red-600">
+                                                {errors.postal_code}
+                                            </p>
                                         )}
                                     </div>
 
@@ -221,7 +272,9 @@ export default function CheckoutIndex({
                                         </label>
                                         <textarea
                                             value={data.notes}
-                                            onChange={(e) => setData('notes', e.target.value)}
+                                            onChange={(e) =>
+                                                setData('notes', e.target.value)
+                                            }
                                             placeholder="e.g. Leave package with front desk reception."
                                             rows={2}
                                             className="mt-1.5 w-full rounded-xl border border-stone-200 p-4 text-sm outline-none focus:border-[#8b9060]"
@@ -237,23 +290,28 @@ export default function CheckoutIndex({
                                         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#8b9060] text-xs font-bold text-white">
                                             3
                                         </span>
-                                        <span>Payment Gateway Integration (Sandbox)</span>
+                                        <span>
+                                            Payment Gateway Integration
+                                            (Sandbox)
+                                        </span>
                                     </h2>
 
-                                    <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700 border border-amber-200">
+                                    <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">
                                         Sandbox Test Mode
                                     </span>
                                 </div>
 
                                 <p className="mt-2 text-xs text-stone-500">
-                                    Simulate online card processing or cash on delivery. No real money will be charged.
+                                    Simulate online card processing or cash on
+                                    delivery. No real money will be charged.
                                 </p>
 
                                 {/* Payment Method Choices */}
                                 <div className="mt-5 space-y-3">
                                     <label
                                         className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition ${
-                                            data.payment_method === 'card_sandbox'
+                                            data.payment_method ===
+                                            'card_sandbox'
                                                 ? 'border-[#8b9060] bg-stone-50/70'
                                                 : 'border-stone-200 hover:border-stone-300'
                                         }`}
@@ -262,22 +320,34 @@ export default function CheckoutIndex({
                                             type="radio"
                                             name="payment_method"
                                             value="card_sandbox"
-                                            checked={data.payment_method === 'card_sandbox'}
-                                            onChange={() => setData('payment_method', 'card_sandbox')}
+                                            checked={
+                                                data.payment_method ===
+                                                'card_sandbox'
+                                            }
+                                            onChange={() =>
+                                                setData(
+                                                    'payment_method',
+                                                    'card_sandbox',
+                                                )
+                                            }
                                             className="mt-1"
                                         />
                                         <div className="flex-1">
                                             <div className="flex items-center justify-between">
                                                 <span className="font-bold text-stone-900">
-                                                    Credit / Debit Card (Sandbox Simulator)
+                                                    Credit / Debit Card (Sandbox
+                                                    Simulator)
                                                 </span>
                                                 <CreditCard className="h-5 w-5 text-[#8b9060]" />
                                             </div>
                                             <p className="mt-1 text-xs text-stone-500">
-                                                Instant simulated card payment approval with automated receipt generation.
+                                                Instant simulated card payment
+                                                approval with automated receipt
+                                                generation.
                                             </p>
 
-                                            {data.payment_method === 'card_sandbox' && (
+                                            {data.payment_method ===
+                                                'card_sandbox' && (
                                                 <div className="mt-4 grid gap-3 border-t border-stone-200 pt-3 sm:grid-cols-2">
                                                     <div className="sm:col-span-2">
                                                         <label className="block text-[11px] font-bold text-stone-600">
@@ -285,12 +355,22 @@ export default function CheckoutIndex({
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            value={data.card_number}
-                                                            onChange={(e) => setData('card_number', e.target.value)}
+                                                            value={
+                                                                data.card_number
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    'card_number',
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
                                                             className="mt-1 h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-xs outline-none focus:border-[#8b9060]"
                                                         />
                                                         <p className="mt-1 text-[11px] text-stone-400">
-                                                            💡 Tip: Use any 16 digits (e.g. 4242 4242 4242 4242).
+                                                            💡 Tip: Use any 16
+                                                            digits (e.g. 4242
+                                                            4242 4242 4242).
                                                         </p>
                                                     </div>
 
@@ -300,8 +380,16 @@ export default function CheckoutIndex({
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            value={data.card_expiry}
-                                                            onChange={(e) => setData('card_expiry', e.target.value)}
+                                                            value={
+                                                                data.card_expiry
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    'card_expiry',
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
                                                             className="mt-1 h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-xs outline-none focus:border-[#8b9060]"
                                                         />
                                                     </div>
@@ -312,8 +400,16 @@ export default function CheckoutIndex({
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            value={data.card_cvv}
-                                                            onChange={(e) => setData('card_cvv', e.target.value)}
+                                                            value={
+                                                                data.card_cvv
+                                                            }
+                                                            onChange={(e) =>
+                                                                setData(
+                                                                    'card_cvv',
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
                                                             className="mt-1 h-10 w-full rounded-lg border border-stone-300 bg-white px-3 text-xs outline-none focus:border-[#8b9060]"
                                                         />
                                                     </div>
@@ -333,8 +429,12 @@ export default function CheckoutIndex({
                                             type="radio"
                                             name="payment_method"
                                             value="cod"
-                                            checked={data.payment_method === 'cod'}
-                                            onChange={() => setData('payment_method', 'cod')}
+                                            checked={
+                                                data.payment_method === 'cod'
+                                            }
+                                            onChange={() =>
+                                                setData('payment_method', 'cod')
+                                            }
                                             className="mt-1"
                                         />
                                         <div>
@@ -342,14 +442,16 @@ export default function CheckoutIndex({
                                                 Cash on Delivery (COD)
                                             </span>
                                             <p className="mt-1 text-xs text-stone-500">
-                                                Pay cash or swipe your physical card upon delivery arrival.
+                                                Pay cash or swipe your physical
+                                                card upon delivery arrival.
                                             </p>
                                         </div>
                                     </label>
 
                                     <label
                                         className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition ${
-                                            data.payment_method === 'eft_sandbox'
+                                            data.payment_method ===
+                                            'eft_sandbox'
                                                 ? 'border-[#8b9060] bg-stone-50/70'
                                                 : 'border-stone-200 hover:border-stone-300'
                                         }`}
@@ -358,8 +460,16 @@ export default function CheckoutIndex({
                                             type="radio"
                                             name="payment_method"
                                             value="eft_sandbox"
-                                            checked={data.payment_method === 'eft_sandbox'}
-                                            onChange={() => setData('payment_method', 'eft_sandbox')}
+                                            checked={
+                                                data.payment_method ===
+                                                'eft_sandbox'
+                                            }
+                                            onChange={() =>
+                                                setData(
+                                                    'payment_method',
+                                                    'eft_sandbox',
+                                                )
+                                            }
                                             className="mt-1"
                                         />
                                         <div>
@@ -367,7 +477,8 @@ export default function CheckoutIndex({
                                                 Instant Sandbox Bank EFT
                                             </span>
                                             <p className="mt-1 text-xs text-stone-500">
-                                                Simulated direct bank transfer with instantaneous verification.
+                                                Simulated direct bank transfer
+                                                with instantaneous verification.
                                             </p>
                                         </div>
                                     </label>
@@ -384,11 +495,16 @@ export default function CheckoutIndex({
                                 </h2>
 
                                 {/* Items list */}
-                                <div className="mt-6 max-h-60 space-y-3 overflow-y-auto border-b border-stone-200 pb-5 pr-1">
+                                <div className="mt-6 max-h-60 space-y-3 overflow-y-auto border-b border-stone-200 pr-1 pb-5">
                                     {items.map((item) => (
-                                        <div key={item.id} className="flex items-center gap-3">
+                                        <div
+                                            key={item.id}
+                                            className="flex items-center gap-3"
+                                        >
                                             <img
-                                                src={getProductImage(item.image)}
+                                                src={getProductImage(
+                                                    item.image,
+                                                )}
                                                 alt={item.name}
                                                 className="h-12 w-12 rounded-lg object-cover"
                                             />
@@ -397,7 +513,8 @@ export default function CheckoutIndex({
                                                     {item.name}
                                                 </p>
                                                 <p className="text-[11px] text-stone-400">
-                                                    Qty: {item.quantity} × {formatPrice(item.price)}
+                                                    Qty: {item.quantity} ×{' '}
+                                                    {formatPrice(item.price)}
                                                 </p>
                                             </div>
                                             <span className="text-xs font-black text-stone-900">
@@ -411,26 +528,35 @@ export default function CheckoutIndex({
                                 <div className="mt-5 space-y-2.5 border-b border-stone-200 pb-5 text-sm text-stone-600">
                                     <div className="flex justify-between">
                                         <span>Subtotal</span>
-                                        <span className="font-semibold text-stone-900">{formatPrice(subtotal)}</span>
+                                        <span className="font-semibold text-stone-900">
+                                            {formatPrice(subtotal)}
+                                        </span>
                                     </div>
 
                                     <div className="flex justify-between">
                                         <span>Delivery Fee</span>
                                         {shippingFee === 0 ? (
-                                            <span className="font-bold text-emerald-700">FREE</span>
+                                            <span className="font-bold text-emerald-700">
+                                                FREE
+                                            </span>
                                         ) : (
-                                            <span className="font-semibold text-stone-900">{formatPrice(shippingFee)}</span>
+                                            <span className="font-semibold text-stone-900">
+                                                {formatPrice(shippingFee)}
+                                            </span>
                                         )}
                                     </div>
                                     {shippingFee > 0 && (
                                         <p className="text-[11px] text-stone-400">
-                                            Orders over R800 qualify for free nationwide delivery.
+                                            Orders over R800 qualify for free
+                                            nationwide delivery.
                                         </p>
                                     )}
                                 </div>
 
                                 <div className="mt-5 flex items-baseline justify-between text-stone-900">
-                                    <span className="text-base font-bold">Total Due</span>
+                                    <span className="text-base font-bold">
+                                        Total Due
+                                    </span>
                                     <span className="text-2xl font-black text-[#252820]">
                                         {formatPrice(totalAmount)}
                                     </span>
@@ -453,11 +579,16 @@ export default function CheckoutIndex({
                                 <div className="mt-6 space-y-2 text-center text-xs text-stone-400">
                                     <div className="flex items-center justify-center gap-1.5">
                                         <ShieldCheck className="h-4 w-4 text-[#8b9060]" />
-                                        <span>256-bit SSL encrypted checkout</span>
+                                        <span>
+                                            256-bit SSL encrypted checkout
+                                        </span>
                                     </div>
                                     <div className="flex items-center justify-center gap-1.5">
                                         <Truck className="h-4 w-4 text-[#8b9060]" />
-                                        <span>Track delivery status immediately after purchase</span>
+                                        <span>
+                                            Track delivery status immediately
+                                            after purchase
+                                        </span>
                                     </div>
                                 </div>
                             </div>

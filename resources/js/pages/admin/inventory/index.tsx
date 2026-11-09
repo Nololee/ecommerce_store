@@ -61,7 +61,12 @@ type Props = {
     };
 };
 
-export default function AdminInventoryIndex({ logs, summary, products, filters }: Props) {
+export default function AdminInventoryIndex({
+    logs,
+    summary,
+    products,
+    filters,
+}: Props) {
     const [search, setSearch] = useState(filters.search);
     const [changeType, setChangeType] = useState(filters.change_type);
     const [isAdjustModalOpen, setIsAdjustModalOpen] = useState(false);
@@ -99,20 +104,21 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
             <Head title="Inventory Movements & Stock Adjustments | Admin" />
 
             {/* Header */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-stone-200 pb-5">
+            <div className="flex flex-col gap-4 border-b border-stone-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-2xl font-black tracking-tight text-stone-900">
                         Inventory Movements & History
                     </h1>
                     <p className="mt-1 text-xs text-stone-500">
-                        Audit logs of all stock additions, deductions, cancellations, and manual administrator adjustments.
+                        Audit logs of all stock additions, deductions,
+                        cancellations, and manual administrator adjustments.
                     </p>
                 </div>
 
                 <button
                     type="button"
                     onClick={() => setIsAdjustModalOpen(true)}
-                    className="flex items-center gap-2 rounded-xl bg-[#8b9060] px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#787c53] transition"
+                    className="flex items-center gap-2 rounded-xl bg-[#8b9060] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition hover:bg-[#787c53]"
                 >
                     <Plus className="h-4 w-4" />
                     <span>Record Stock Adjustment</span>
@@ -122,31 +128,53 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
             {/* Summary Cards */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Catalogue Items</span>
-                    <p className="mt-2 text-2xl font-black text-stone-900">{summary.total_products}</p>
+                    <span className="text-xs font-bold tracking-wider text-stone-500 uppercase">
+                        Catalogue Items
+                    </span>
+                    <p className="mt-2 text-2xl font-black text-stone-900">
+                        {summary.total_products}
+                    </p>
                     <span className="text-[11px] text-stone-400">Products</span>
                 </div>
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Total Stock On-Hand</span>
-                    <p className="mt-2 text-2xl font-black text-stone-900">{summary.total_stock}</p>
-                    <span className="text-[11px] text-stone-400">Total physical units</span>
+                    <span className="text-xs font-bold tracking-wider text-stone-500 uppercase">
+                        Total Stock On-Hand
+                    </span>
+                    <p className="mt-2 text-2xl font-black text-stone-900">
+                        {summary.total_stock}
+                    </p>
+                    <span className="text-[11px] text-stone-400">
+                        Total physical units
+                    </span>
                 </div>
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-amber-600">Low Stock Alert</span>
-                    <p className="mt-2 text-2xl font-black text-amber-600">{summary.low_stock}</p>
-                    <span className="text-[11px] text-stone-400">&le; 10 units left</span>
+                    <span className="text-xs font-bold tracking-wider text-amber-600 uppercase">
+                        Low Stock Alert
+                    </span>
+                    <p className="mt-2 text-2xl font-black text-amber-600">
+                        {summary.low_stock}
+                    </p>
+                    <span className="text-[11px] text-stone-400">
+                        &le; 10 units left
+                    </span>
                 </div>
                 <div className="rounded-2xl border border-stone-200/80 bg-white p-5 shadow-2xs">
-                    <span className="text-xs font-bold uppercase tracking-wider text-red-600">Out of Stock</span>
-                    <p className="mt-2 text-2xl font-black text-red-600">{summary.out_of_stock}</p>
-                    <span className="text-[11px] text-stone-400">Needs replenishment</span>
+                    <span className="text-xs font-bold tracking-wider text-red-600 uppercase">
+                        Out of Stock
+                    </span>
+                    <p className="mt-2 text-2xl font-black text-red-600">
+                        {summary.out_of_stock}
+                    </p>
+                    <span className="text-[11px] text-stone-400">
+                        Needs replenishment
+                    </span>
                 </div>
             </div>
 
             {/* Filters */}
             <div className="grid grid-cols-1 gap-3 rounded-2xl border border-stone-200/80 bg-white p-4 shadow-2xs sm:grid-cols-3">
                 <div className="relative sm:col-span-2">
-                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
+                    <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400" />
                     <input
                         type="text"
                         value={search}
@@ -157,7 +185,7 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                                 handleFilter(search, changeType);
                             }
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 pl-9 pr-4 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 py-2 pr-4 pl-9 text-xs font-medium text-stone-800 placeholder-stone-400 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     />
                 </div>
 
@@ -168,22 +196,28 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                             setChangeType(e.target.value);
                             handleFilter(search, e.target.value);
                         }}
-                        className="w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                        className="w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-800 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                     >
                         <option value="">All Movement Types</option>
                         <option value="adjustment">Manual Adjustment</option>
-                        <option value="order_placed">Customer Order Placed</option>
-                        <option value="order_cancelled">Order Cancelled (Restocked)</option>
-                        <option value="initial_stock">Initial Stock Creation</option>
+                        <option value="order_placed">
+                            Customer Order Placed
+                        </option>
+                        <option value="order_cancelled">
+                            Order Cancelled (Restocked)
+                        </option>
+                        <option value="initial_stock">
+                            Initial Stock Creation
+                        </option>
                     </select>
                 </div>
             </div>
 
             {/* Movement Logs Table */}
-            <div className="rounded-2xl border border-stone-200/80 bg-white shadow-2xs overflow-hidden">
+            <div className="overflow-hidden rounded-2xl border border-stone-200/80 bg-white shadow-2xs">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
-                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                        <thead className="border-b border-stone-200 bg-stone-50/80 text-[10px] font-bold tracking-wider text-stone-600 uppercase">
                             <tr>
                                 <th className="px-4 py-3">Timestamp</th>
                                 <th className="px-4 py-3">Product</th>
@@ -198,23 +232,38 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                         <tbody className="divide-y divide-stone-100">
                             {logs.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={8} className="py-12 text-center text-stone-400">
+                                    <td
+                                        colSpan={8}
+                                        className="py-12 text-center text-stone-400"
+                                    >
                                         No stock movements recorded yet.
                                     </td>
                                 </tr>
                             ) : (
                                 logs.data.map((log) => (
-                                    <tr key={log.id} className="hover:bg-stone-50/50 transition">
+                                    <tr
+                                        key={log.id}
+                                        className="transition hover:bg-stone-50/50"
+                                    >
                                         <td className="px-4 py-3 font-mono text-[11px] text-stone-500">
-                                            {new Date(log.created_at).toLocaleString()}
+                                            {new Date(
+                                                log.created_at,
+                                            ).toLocaleString()}
                                         </td>
                                         <td className="px-4 py-3">
-                                            <p className="font-bold text-stone-900">{log.product?.name ?? 'Deleted Product'}</p>
-                                            <p className="text-[10px] font-mono text-stone-400">SKU: {log.product?.sku ?? 'N/A'}</p>
+                                            <p className="font-bold text-stone-900">
+                                                {log.product?.name ??
+                                                    'Deleted Product'}
+                                            </p>
+                                            <p className="font-mono text-[10px] text-stone-400">
+                                                SKU: {log.product?.sku ?? 'N/A'}
+                                            </p>
                                         </td>
                                         <td className="px-4 py-3">
                                             <span className="rounded bg-stone-100 px-2 py-0.5 text-[10px] font-bold text-stone-700">
-                                                {log.change_type.replace('_', ' ').toUpperCase()}
+                                                {log.change_type
+                                                    .replace('_', ' ')
+                                                    .toUpperCase()}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 font-mono text-stone-500">
@@ -223,7 +272,9 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                                         <td className="px-4 py-3 font-mono font-bold">
                                             <span
                                                 className={`inline-flex items-center gap-0.5 ${
-                                                    log.quantity_change > 0 ? 'text-emerald-600' : 'text-red-600'
+                                                    log.quantity_change > 0
+                                                        ? 'text-emerald-600'
+                                                        : 'text-red-600'
                                                 }`}
                                             >
                                                 {log.quantity_change > 0 ? (
@@ -231,16 +282,18 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                                                 ) : (
                                                     <ArrowDownRight className="h-3.5 w-3.5" />
                                                 )}
-                                                {log.quantity_change > 0 ? `+${log.quantity_change}` : log.quantity_change}
+                                                {log.quantity_change > 0
+                                                    ? `+${log.quantity_change}`
+                                                    : log.quantity_change}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 font-mono font-bold text-stone-900">
                                             {log.quantity_after}
                                         </td>
-                                        <td className="px-4 py-3 text-stone-700 max-w-xs truncate">
+                                        <td className="max-w-xs truncate px-4 py-3 text-stone-700">
                                             {log.reason || 'N/A'}
                                         </td>
-                                        <td className="px-4 py-3 text-stone-500 text-[11px]">
+                                        <td className="px-4 py-3 text-[11px] text-stone-500">
                                             {log.user?.name ?? 'System'}
                                         </td>
                                     </tr>
@@ -266,10 +319,12 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                                         link.active
                                             ? 'bg-[#8b9060] text-white'
                                             : link.url
-                                            ? 'text-stone-600 hover:bg-stone-200'
-                                            : 'text-stone-300 pointer-events-none'
+                                              ? 'text-stone-600 hover:bg-stone-200'
+                                              : 'pointer-events-none text-stone-300'
                                     }`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
                                 />
                             ))}
                         </div>
@@ -279,23 +334,31 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
 
             {/* Stock Adjustment Modal */}
             {isAdjustModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
                     <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-                        <h2 className="text-base font-bold text-stone-900 border-b border-stone-200 pb-3">
+                        <h2 className="border-b border-stone-200 pb-3 text-base font-bold text-stone-900">
                             Record Manual Stock Adjustment
                         </h2>
 
-                        <form onSubmit={handleAdjustSubmit} className="mt-4 space-y-4">
+                        <form
+                            onSubmit={handleAdjustSubmit}
+                            className="mt-4 space-y-4"
+                        >
                             <div>
-                                <label className="block text-xs font-bold text-stone-700">Select Product *</label>
+                                <label className="block text-xs font-bold text-stone-700">
+                                    Select Product *
+                                </label>
                                 <select
                                     value={data.product_id}
-                                    onChange={(e) => setData('product_id', e.target.value)}
-                                    className="mt-1 w-full rounded-xl border border-stone-300 py-2 px-3 text-xs font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    onChange={(e) =>
+                                        setData('product_id', e.target.value)
+                                    }
+                                    className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-semibold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                                 >
                                     {products.map((p) => (
                                         <option key={p.id} value={p.id}>
-                                            {p.name} ({p.sku}) &bull; Current Stock: {p.stock_quantity}
+                                            {p.name} ({p.sku}) &bull; Current
+                                            Stock: {p.stock_quantity}
                                         </option>
                                     ))}
                                 </select>
@@ -303,32 +366,50 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
 
                             <div>
                                 <label className="block text-xs font-bold text-stone-700">
-                                    Quantity Change (+ additions, - write-offs) *
+                                    Quantity Change (+ additions, - write-offs)
+                                    *
                                 </label>
                                 <input
                                     type="number"
                                     required
                                     value={data.quantity_change}
-                                    onChange={(e) => setData('quantity_change', parseInt(e.target.value) || 0)}
-                                    className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-mono font-bold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
+                                    onChange={(e) =>
+                                        setData(
+                                            'quantity_change',
+                                            parseInt(e.target.value) || 0,
+                                        )
+                                    }
+                                    className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 font-mono text-xs font-bold text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                                 />
-                                {errors.quantity_change && <p className="mt-1 text-[11px] text-red-600">{errors.quantity_change}</p>}
+                                {errors.quantity_change && (
+                                    <p className="mt-1 text-[11px] text-red-600">
+                                        {errors.quantity_change}
+                                    </p>
+                                )}
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-stone-700">Reason / Reference *</label>
+                                <label className="block text-xs font-bold text-stone-700">
+                                    Reason / Reference *
+                                </label>
                                 <input
                                     type="text"
                                     required
                                     value={data.reason}
-                                    onChange={(e) => setData('reason', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('reason', e.target.value)
+                                    }
                                     placeholder="e.g. Stocktake reconciliation, Damaged return, Supplier delivery"
                                     className="mt-1 w-full rounded-xl border border-stone-300 px-3 py-2 text-xs font-medium text-stone-900 focus:border-[#8b9060] focus:ring-1 focus:ring-[#8b9060]"
                                 />
-                                {errors.reason && <p className="mt-1 text-[11px] text-red-600">{errors.reason}</p>}
+                                {errors.reason && (
+                                    <p className="mt-1 text-[11px] text-red-600">
+                                        {errors.reason}
+                                    </p>
+                                )}
                             </div>
 
-                            <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-200">
+                            <div className="flex items-center justify-end gap-3 border-t border-stone-200 pt-3">
                                 <button
                                     type="button"
                                     onClick={() => setIsAdjustModalOpen(false)}
@@ -341,7 +422,9 @@ export default function AdminInventoryIndex({ logs, summary, products, filters }
                                     disabled={processing}
                                     className="rounded-xl bg-[#8b9060] px-5 py-2 text-xs font-bold text-white shadow-xs hover:bg-[#787c53] disabled:opacity-50"
                                 >
-                                    {processing ? 'Applying...' : 'Apply Stock Adjustment'}
+                                    {processing
+                                        ? 'Applying...'
+                                        : 'Apply Stock Adjustment'}
                                 </button>
                             </div>
                         </form>
