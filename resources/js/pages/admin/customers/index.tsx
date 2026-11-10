@@ -1,20 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Calendar,
-    CheckCircle2,
-    Clock,
-    CreditCard,
-    DollarSign,
-    Filter,
-    Mail,
-    Phone,
-    Power,
-    Search,
-    ShoppingBag,
-    UserCheck,
-    Users,
-    XCircle,
-} from 'lucide-react';
+import { Power, Search } from 'lucide-react';
 import { useState } from 'react';
 
 type Customer = {

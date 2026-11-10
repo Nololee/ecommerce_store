@@ -1,17 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    AlertCircle,
-    CheckCircle2,
-    Clock,
-    CreditCard,
-    DollarSign,
-    ExternalLink,
-    Filter,
-    RefreshCw,
-    Search,
-    Shield,
-    XCircle,
-} from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState } from 'react';
 
 type Payment = {

@@ -1,15 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Activity,
-    AlertCircle,
-    Calendar,
-    CheckCircle2,
-    Clock,
-    Filter,
-    Search,
-    Shield,
-    User,
-} from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState } from 'react';
 
 type ActivityLog = {

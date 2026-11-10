@@ -2,12 +2,10 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     Activity,
     AlertCircle,
-    ArrowLeft,
     BarChart3,
     CheckCircle2,
     CreditCard,
     ExternalLink,
-    FileText,
     FolderTree,
     History,
     LayoutDashboard,

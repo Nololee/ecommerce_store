@@ -1,18 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    Activity,
-    ArrowLeft,
-    Calendar,
-    CheckCircle2,
-    Clock,
-    DollarSign,
-    Mail,
-    Phone,
-    Power,
-    Shield,
-    ShoppingBag,
-    User,
-} from 'lucide-react';
+import { ArrowLeft, Power } from 'lucide-react';
 
 type OrderItem = {
     id: number;

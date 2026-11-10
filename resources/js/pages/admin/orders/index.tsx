@@ -1,21 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import {
-    AlertCircle,
-    Calendar,
-    CheckCircle2,
-    Clock,
-    CreditCard,
-    DollarSign,
-    Filter,
-    Package,
-    Phone,
-    RefreshCw,
-    Search,
-    ShoppingBag,
-    Truck,
-    User,
-    XCircle,
-} from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState } from 'react';
 
 type OrderItem = {

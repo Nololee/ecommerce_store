@@ -152,7 +152,7 @@ export default function OrderShow({ order }: Props) {
                         </h2>
 
                         <div className="relative grid grid-cols-2 gap-4 sm:grid-cols-5 sm:gap-2">
-                            {steps.map((step, idx) => {
+                            {steps.map((step) => {
                                 const status = getStepStatus(step.key);
                                 const isCompleted = status === 'completed';
                                 const StepIcon = step.icon;

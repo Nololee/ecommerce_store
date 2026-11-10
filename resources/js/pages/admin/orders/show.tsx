@@ -1,21 +1,11 @@
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import {
-    AlertCircle,
     ArrowLeft,
-    CheckCircle2,
-    Clock,
     CreditCard,
-    DollarSign,
-    Mail,
     MapPin,
     Package,
-    Phone,
-    RefreshCw,
-    Shield,
-    ShoppingBag,
     Truck,
     User,
-    XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
 

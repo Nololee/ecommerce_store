@@ -1,14 +1,5 @@
-import { Head, Link, router, useForm } from '@inertiajs/react';
-import {
-    Edit2,
-    FolderPlus,
-    FolderTree,
-    Package,
-    Plus,
-    Search,
-    Trash2,
-    X,
-} from 'lucide-react';
+import { Head, router, useForm } from '@inertiajs/react';
+import { Edit2, FolderTree, Plus, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 
 type Category = {
@@ -21,13 +12,12 @@ type Category = {
 
 type Props = {
     categories: Category[];
-    filters: {
-        search: string;
+    filters?: {
+        search?: string;
     };
 };
 
-export default function AdminCategoriesIndex({ categories, filters }: Props) {
-    const [search, setSearch] = useState(filters.search);
+export default function AdminCategoriesIndex({ categories }: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState<Category | null>(
         null,

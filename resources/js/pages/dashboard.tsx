@@ -42,7 +42,7 @@ export default function Dashboard({ pendingInvitations = [] }: Props) {
     );
 }
 
-Dashboard.layout = (props: { currentTeam?: { slug: string } | null }) => ({
+Dashboard.layout = () => ({
     breadcrumbs: [
         {
             title: 'Dashboard',

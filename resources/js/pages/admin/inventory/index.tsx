@@ -1,16 +1,5 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import {
-    AlertTriangle,
-    ArrowDownRight,
-    ArrowUpRight,
-    History,
-    Package,
-    Plus,
-    RefreshCw,
-    Search,
-    ShieldAlert,
-    User,
-} from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 
 type Product = {

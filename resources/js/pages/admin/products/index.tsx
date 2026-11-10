@@ -1,12 +1,9 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import {
-    AlertTriangle,
     Check,
     Edit,
     Edit2,
     Eye,
-    FolderPlus,
-    Package,
     Plus,
     Power,
     Search,

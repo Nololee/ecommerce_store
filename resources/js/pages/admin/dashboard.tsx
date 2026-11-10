@@ -1,21 +1,13 @@
 import { Head, Link, router } from '@inertiajs/react';
 import {
-    AlertCircle,
-    AlertTriangle,
-    ArrowDownRight,
-    ArrowUpRight,
-    Calendar,
     CheckCircle2,
     Clock,
     DollarSign,
-    ExternalLink,
     Filter,
     FolderTree,
     Package,
     RefreshCw,
-    Shield,
     ShoppingBag,
-    TrendingUp,
     Users,
     XCircle,
 } from 'lucide-react';

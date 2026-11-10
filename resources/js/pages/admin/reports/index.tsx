@@ -1,15 +1,5 @@
-import { Head, Link, router } from '@inertiajs/react';
-import {
-    BarChart3,
-    Calendar,
-    Download,
-    FileSpreadsheet,
-    FileText,
-    Filter,
-    Package,
-    ShoppingBag,
-    TrendingUp,
-} from 'lucide-react';
+import { Head, router } from '@inertiajs/react';
+import { Download, FileSpreadsheet, FileText, Filter } from 'lucide-react';
 
 type MetricData = {
     total_sales: number;
@@ -44,7 +34,6 @@ type Props = {
 
 export default function AdminReportsIndex({
     metrics,
-    salesTimeline,
     productPerformance,
     filters,
 }: Props) {
