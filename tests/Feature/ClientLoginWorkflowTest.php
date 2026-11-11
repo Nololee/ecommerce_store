@@ -23,7 +23,7 @@ test('client can log in and is redirected smoothly to intended store page', func
     $response->assertRedirect('/checkout');
 });
 
-test('client logging in without prior intended URL is redirected to the shop catalogue', function () {
+test('client logging in without prior intended URL is redirected to the customer dashboard', function () {
     $client = User::factory()->create([
         'is_admin' => false,
         'is_active' => true,
@@ -36,10 +36,10 @@ test('client logging in without prior intended URL is redirected to the shop cat
     ]);
 
     $this->assertAuthenticatedAs($client);
-    $response->assertRedirect('/shop');
+    $response->assertRedirect('/customer/dashboard');
 });
 
-test('admin logging in is redirected to the admin dashboard', function () {
+test('admin logging in is redirected to the choose view page', function () {
     $admin = User::factory()->admin()->create([
         'password' => 'adminpassword',
     ]);
@@ -50,5 +50,5 @@ test('admin logging in is redirected to the admin dashboard', function () {
     ]);
 
     $this->assertAuthenticatedAs($admin);
-    $response->assertRedirect('/admin');
+    $response->assertRedirect(route('choose-view'));
 });

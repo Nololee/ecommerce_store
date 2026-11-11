@@ -59,7 +59,7 @@ class DashboardController extends Controller
                 'product_id' => $item->product_id,
                 'product_name' => $item->product_name,
                 'product_slug' => $item->product?->slug,
-                'product_image' => $item->product?->image_url ?? $item->product?->image,
+                'product_image' => $item->product?->image_url,
                 'price' => (float) $item->price,
                 'quantity' => $item->quantity,
                 'line_total' => (float) $item->line_total,

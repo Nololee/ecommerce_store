@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\InventoryLog;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -78,7 +79,7 @@ class OrderController extends Controller
 
         // Restock inventory if order is cancelled from a non-cancelled state
         if ($newStatus === 'cancelled' && $oldStatus !== 'cancelled') {
-            /** @var \App\Models\OrderItem $item */
+            /** @var OrderItem $item */
             foreach ($order->items as $item) {
                 if ($item->product) {
                     $stockBefore = $item->product->stock_quantity;

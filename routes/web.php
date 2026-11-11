@@ -166,16 +166,27 @@ Route::prefix('customer')
         Route::patch('/addresses/{address}/default', [CustomerAddressController::class, 'setDefault'])->name('addresses.default');
     });
 
-// Customer standard dashboard
+// Customer standard dashboard & team dashboard
+Route::prefix('{current_team}')
+    ->middleware(['auth', 'verified', EnsureTeamMembership::class])
+    ->group(function () {
+        Route::get('dashboard', DashboardController::class)->name('dashboard');
+    });
+
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('dashboard', DashboardController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('invitations/{invitation}/accept', [TeamInvitationController::class, 'accept'])->name('invitations.accept');
+    Route::delete('invitations/{invitation}', [TeamInvitationController::class, 'decline'])->name('invitations.decline');
 });
 
 Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
-    ->middleware(['auth', EnsureTeamMembership::class])
+    ->middleware(['auth'])
     ->name('team-invitations.accept');
 Route::post('/team-invitations/{invitation}/decline', [TeamInvitationController::class, 'decline'])
-    ->middleware(['auth', EnsureTeamMembership::class])
+    ->middleware(['auth'])
     ->name('team-invitations.decline');
 
 require __DIR__.'/settings.php';

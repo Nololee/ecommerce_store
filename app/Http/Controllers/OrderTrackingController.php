@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -61,12 +62,12 @@ class OrderTrackingController extends Controller
                 'status' => $order->status,
                 'notes' => $order->notes,
                 'created_at' => $order->created_at->format('M d, Y H:i'),
-                'items' => $order->items->map(function (\App\Models\OrderItem $item) {
+                'items' => $order->items->map(function (OrderItem $item) {
                     return [
                         'id' => $item->id,
                         'product_name' => $item->product_name,
                         'product_slug' => $item->product?->slug,
-                        'product_image' => $item->product?->image_url ?? $item->product?->image,
+                        'product_image' => $item->product?->image_url,
                         'price' => (float) $item->price,
                         'quantity' => $item->quantity,
                         'line_total' => (float) $item->line_total,

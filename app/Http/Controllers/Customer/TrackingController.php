@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -73,11 +74,11 @@ class TrackingController extends Controller
             'notes' => $order->notes,
             'created_at' => $order->created_at->format('M d, Y H:i'),
             'updated_at' => $order->updated_at->format('M d, Y H:i'),
-            'items' => $order->items->map(fn ($item) => [
+            'items' => $order->items->map(fn (OrderItem $item) => [
                 'id' => $item->id,
                 'product_name' => $item->product_name,
                 'product_slug' => $item->product?->slug,
-                'product_image' => $item->product?->image_url ?? $item->product?->image,
+                'product_image' => $item->product?->image_url,
                 'price' => (float) $item->price,
                 'quantity' => $item->quantity,
                 'line_total' => (float) $item->line_total,

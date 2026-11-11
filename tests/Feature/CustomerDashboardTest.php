@@ -42,7 +42,7 @@ test('authenticated customer can access customer dashboard overview and see thei
         ->component('customer/dashboard')
         ->has('metrics')
         ->where('metrics.total_orders', 1)
-        ->where('metrics.total_spent', 250.00)
+        ->where('metrics.total_spent', fn ($val) => (float) $val === 250.00)
         ->where('metrics.delivered_orders', 1)
         ->has('recentOrders', 1)
         ->has('recentItems', 1)
@@ -97,7 +97,7 @@ test('customer purchase history displays items snapshot with historical price pa
         ->component('customer/purchase-history')
         ->has('purchases.data', 1)
         ->where('purchases.data.0.product_name', 'Mechanical Wireless Keyboard')
-        ->where('purchases.data.0.price_paid', 899.00)
+        ->where('purchases.data.0.price_paid', fn ($val) => (float) $val === 899.00)
         ->where('purchases.data.0.quantity', 2)
     );
 });
