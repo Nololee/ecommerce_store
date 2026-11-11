@@ -182,11 +182,4 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('invitations/{invitation}', [TeamInvitationController::class, 'decline'])->name('invitations.decline');
 });
 
-Route::get('/team-invitations/{invitation}', [TeamInvitationController::class, 'accept'])
-    ->middleware(['auth'])
-    ->name('team-invitations.accept');
-Route::post('/team-invitations/{invitation}/decline', [TeamInvitationController::class, 'decline'])
-    ->middleware(['auth'])
-    ->name('team-invitations.decline');
-
 require __DIR__.'/settings.php';
