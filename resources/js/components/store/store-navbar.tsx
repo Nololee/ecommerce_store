@@ -85,12 +85,16 @@ export default function StoreNavbar() {
 
                     {auth?.user ? (
                         <div className="flex items-center gap-3">
-                            <div className="hidden items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-3.5 py-1.5 sm:flex">
+                            <Link
+                                href="/customer/dashboard"
+                                className="hidden items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-3.5 py-1.5 transition hover:border-[#8b9060] hover:bg-[#8b9060]/10 sm:flex"
+                                title="Customer Dashboard"
+                            >
                                 <User className="h-3.5 w-3.5 text-[#8b9060]" />
                                 <span className="text-xs font-bold text-stone-700">
                                     {auth.user.name.split(' ')[0]}
                                 </span>
-                            </div>
+                            </Link>
 
                             <button
                                 type="button"
@@ -182,7 +186,14 @@ export default function StoreNavbar() {
                                         Signed in as {auth.user.name}
                                     </p>
                                     <Link
-                                        href="/track-order"
+                                        href="/customer/dashboard"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="block rounded-xl bg-[#8b9060] py-2.5 text-center font-semibold text-white shadow-xs"
+                                    >
+                                        Customer Dashboard
+                                    </Link>
+                                    <Link
+                                        href="/customer/orders"
                                         onClick={() => setMobileMenuOpen(false)}
                                         className="block rounded-xl border border-stone-200 py-2.5 text-center font-semibold text-stone-800"
                                     >

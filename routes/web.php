@@ -11,13 +11,23 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ChooseViewController;
+use App\Http\Controllers\Customer\AddressController as CustomerAddressController;
+use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
+use App\Http\Controllers\Customer\OrderController as CustomerOrderController;
+use App\Http\Controllers\Customer\ProfileController as CustomerProfileController;
+use App\Http\Controllers\Customer\PurchaseHistoryController as CustomerPurchaseHistoryController;
+use App\Http\Controllers\Customer\TrackingController as CustomerTrackingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderTrackingController;
+use App\Http\Controllers\PayFastPaymentController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\Teams\TeamInvitationController;
+use App\Http\Middleware\EnsureAdminConsentsToCustomerView;
 use App\Http\Middleware\EnsureTeamMembership;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Models\Product;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -56,11 +66,28 @@ Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // PayFast Gateway Redirect & Callback Routes
+    Route::get('/checkout/payfast/{tracking_number}', [PayFastPaymentController::class, 'redirect'])->name('checkout.payfast.redirect');
+    Route::get('/checkout/payfast/{tracking_number}/return', [PayFastPaymentController::class, 'return'])->name('checkout.payfast.return');
+    Route::get('/checkout/payfast/{tracking_number}/cancel', [PayFastPaymentController::class, 'cancel'])->name('checkout.payfast.cancel');
 });
+
+// PayFast ITN Webhook (Publicly accessible by PayFast servers)
+Route::post('/checkout/payfast/notify', [PayFastPaymentController::class, 'notify'])
+    ->withoutMiddleware([ValidateCsrfToken::class])
+    ->name('checkout.payfast.notify');
 
 // Order Tracking
 Route::get('/track-order', [OrderTrackingController::class, 'index'])->name('orders.track');
 Route::get('/orders/{tracking_number}', [OrderTrackingController::class, 'show'])->name('orders.show');
+
+// Admin View-Selector (shown to admins right after login so they can choose their mode)
+Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
+    Route::get('/choose-view', [ChooseViewController::class, 'index'])->name('choose-view');
+    Route::post('/choose-view/customer', [ChooseViewController::class, 'enterCustomerView'])->name('choose-view.customer');
+    Route::post('/choose-view/exit', [ChooseViewController::class, 'exitCustomerView'])->name('choose-view.exit');
+});
 
 // Admin Panel (Protected: Admin Only)
 Route::prefix('admin')
@@ -108,6 +135,35 @@ Route::prefix('admin')
         // Reports & Analytics
         Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export/{type}', [AdminReportController::class, 'export'])->name('reports.export');
+    });
+
+// Customer Dedicated Dashboard & Account Portal (Protected)
+Route::prefix('customer')
+    ->name('customer.')
+    ->middleware(['auth', EnsureAdminConsentsToCustomerView::class])
+    ->group(function () {
+        Route::get('/dashboard', CustomerDashboardController::class)->name('dashboard');
+
+        // My Orders
+        Route::get('/orders', [CustomerOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{tracking_number}', [CustomerOrderController::class, 'show'])->name('orders.show');
+
+        // Purchase History
+        Route::get('/purchase-history', CustomerPurchaseHistoryController::class)->name('purchases.index');
+
+        // Track My Orders
+        Route::get('/tracking', [CustomerTrackingController::class, 'index'])->name('tracking.index');
+
+        // My Profile
+        Route::get('/profile', [CustomerProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [CustomerProfileController::class, 'update'])->name('profile.update');
+
+        // My Addresses
+        Route::get('/addresses', [CustomerAddressController::class, 'index'])->name('addresses.index');
+        Route::post('/addresses', [CustomerAddressController::class, 'store'])->name('addresses.store');
+        Route::put('/addresses/{address}', [CustomerAddressController::class, 'update'])->name('addresses.update');
+        Route::delete('/addresses/{address}', [CustomerAddressController::class, 'destroy'])->name('addresses.destroy');
+        Route::patch('/addresses/{address}/default', [CustomerAddressController::class, 'setDefault'])->name('addresses.default');
     });
 
 // Customer standard dashboard

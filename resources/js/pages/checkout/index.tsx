@@ -57,7 +57,7 @@ export default function CheckoutIndex({
         shipping_address: customer.shipping_address || '',
         city: customer.city || '',
         postal_code: customer.postal_code || '',
-        payment_method: 'card_sandbox',
+        payment_method: 'payfast_sandbox',
         card_number: '4242 4242 4242 4242',
         card_expiry: '12/28',
         card_cvv: '123',
@@ -308,6 +308,55 @@ export default function CheckoutIndex({
 
                                 {/* Payment Method Choices */}
                                 <div className="mt-5 space-y-3">
+                                    {/* Option 1: Official PayFast Sandbox */}
+                                    <label
+                                        className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition ${
+                                            data.payment_method ===
+                                            'payfast_sandbox'
+                                                ? 'border-[#ea1c24] bg-red-50/20'
+                                                : 'border-stone-200 hover:border-stone-300'
+                                        }`}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="payment_method"
+                                            value="payfast_sandbox"
+                                            checked={
+                                                data.payment_method ===
+                                                'payfast_sandbox'
+                                            }
+                                            onChange={() =>
+                                                setData(
+                                                    'payment_method',
+                                                    'payfast_sandbox',
+                                                )
+                                            }
+                                            className="mt-1"
+                                        />
+                                        <div className="flex-1">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-bold text-stone-900">
+                                                        PayFast Gateway (Sandbox
+                                                        Mode)
+                                                    </span>
+                                                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-700">
+                                                        Recommended
+                                                    </span>
+                                                </div>
+                                                <Lock className="h-5 w-5 text-[#ea1c24]" />
+                                            </div>
+                                            <p className="mt-1 text-xs text-stone-500">
+                                                Redirects to PayFast&apos;s
+                                                official sandbox test portal.
+                                                Supports Visa, Mastercard,
+                                                Instant EFT &amp; Capitec Pay
+                                                simulations.
+                                            </p>
+                                        </div>
+                                    </label>
+
+                                    {/* Option 2: Direct Card Sandbox */}
                                     <label
                                         className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-4 transition ${
                                             data.payment_method ===

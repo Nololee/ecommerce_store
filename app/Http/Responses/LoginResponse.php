@@ -16,13 +16,13 @@ class LoginResponse implements LoginResponseContract
         if ($request->user()?->is_admin) {
             return $request->wantsJson()
                 ? new JsonResponse(['two_factor' => false], 200)
-                : redirect()->intended('/admin');
+                : redirect()->route('choose-view');
         }
 
         // Regular e-commerce client / customer:
-        // Redirect to wherever they were headed (e.g. /checkout), or to the public store catalogue / shop
+        // Redirect to wherever they were headed (e.g. /checkout), or to their customer dashboard
         return $request->wantsJson()
             ? new JsonResponse(['two_factor' => false], 200)
-            : redirect()->intended('/shop');
+            : redirect()->intended('/customer/dashboard');
     }
 }

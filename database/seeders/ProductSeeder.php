@@ -92,7 +92,7 @@ class ProductSeeder extends Seeder
                 'description' => '15W Qi-certified fast wireless charging stand with dual-coil design for portrait and landscape smartphone charging.',
                 'price' => 299.00,
                 'stock_quantity' => 30,
-                'image' => 'https://images.unsplash.com/photo-1622445262464-84b1456045b6?w=800&auto=format&fit=crop&q=80',
+                'image' => 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=800&auto=format&fit=crop&q=80',
             ],
 
             // Beauty
@@ -124,7 +124,7 @@ class ProductSeeder extends Seeder
                 'description' => 'Cold-pressed Moroccan argan oil that restores shine, tames unruly frizz, and shields strands from heat damage.',
                 'price' => 220.00,
                 'stock_quantity' => 30,
-                'image' => 'https://images.unsplash.com/photo-1608248597359-0027f6b95764?w=800&auto=format&fit=crop&q=80',
+                'image' => 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80',
             ],
             [
                 'sku' => 'BEA-004',
@@ -134,7 +134,7 @@ class ProductSeeder extends Seeder
                 'description' => 'French green clay mask infused with organic tea tree and rosemary to gently detoxify pores and revitalize tired skin.',
                 'price' => 189.00,
                 'stock_quantity' => 20,
-                'image' => 'https://images.unsplash.com/photo-1567928815117-640a23351ecf?w=800&auto=format&fit=crop&q=80',
+                'image' => 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&auto=format&fit=crop&q=80',
             ],
 
             // Home & Kitchen

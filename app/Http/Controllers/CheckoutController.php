@@ -88,7 +88,7 @@ class CheckoutController extends Controller
             'shipping_address' => ['required', 'string', 'max:500'],
             'city' => ['required', 'string', 'max:100'],
             'postal_code' => ['required', 'string', 'max:20'],
-            'payment_method' => ['required', 'string', 'in:card_sandbox,cod,eft_sandbox'],
+            'payment_method' => ['required', 'string', 'in:payfast_sandbox,card_sandbox,cod,eft_sandbox'],
             'card_number' => ['nullable', 'string'],
             'card_expiry' => ['nullable', 'string'],
             'card_cvv' => ['nullable', 'string'],
@@ -154,10 +154,11 @@ class CheckoutController extends Controller
             $trackingNumber = 'ARN-'.date('Y').'-'.strtoupper(Str::random(6));
 
             $paymentStatus = match ($validated['payment_method']) {
+                'payfast_sandbox' => 'pending',
                 'card_sandbox' => 'paid',
                 'eft_sandbox' => 'paid',
                 'cod' => 'pending',
-                default => 'paid',
+                default => 'pending',
             };
 
             $order = Order::create([
@@ -174,7 +175,7 @@ class CheckoutController extends Controller
                 'total_amount' => $totalAmount,
                 'payment_method' => $validated['payment_method'],
                 'payment_status' => $paymentStatus,
-                'payment_transaction_id' => 'TXN_SANDBOX_'.strtoupper(Str::random(12)),
+                'payment_transaction_id' => $validated['payment_method'] === 'payfast_sandbox' ? null : 'TXN_SANDBOX_'.strtoupper(Str::random(12)),
                 'status' => 'processing',
                 'notes' => $validated['notes'] ?? null,
             ]);
@@ -197,6 +198,11 @@ class CheckoutController extends Controller
 
         // Clear cart session
         $request->session()->forget('cart');
+
+        // If PayFast gateway chosen, redirect to PayFast sandbox dispatcher
+        if ($order->payment_method === 'payfast_sandbox') {
+            return redirect()->route('checkout.payfast.redirect', $order->tracking_number);
+        }
 
         return redirect()->route('orders.show', $order->tracking_number)
             ->with('success', "Order #{$order->tracking_number} placed successfully!");

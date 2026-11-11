@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    'payfast' => [
+        'merchant_id' => env('PAYFAST_MERCHANT_ID', '10000100'), // Default PayFast sandbox test merchant ID
+        'merchant_key' => env('PAYFAST_MERCHANT_KEY', '46f0cd694581a'), // Default PayFast sandbox test merchant key
+        'passphrase' => env('PAYFAST_PASSPHRASE', null),
+        'sandbox' => env('PAYFAST_SANDBOX', true),
+        'url' => env('PAYFAST_SANDBOX', true)
+            ? 'https://sandbox.payfast.co.za/eng/process'
+            : 'https://www.payfast.co.za/eng/process',
+        'validate_url' => env('PAYFAST_SANDBOX', true)
+            ? 'https://sandbox.payfast.co.za/eng/query/validate'
+            : 'https://www.payfast.co.za/eng/query/validate',
+    ],
+
 ];
