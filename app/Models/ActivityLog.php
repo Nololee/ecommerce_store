@@ -75,8 +75,8 @@ class ActivityLog extends Model
             'subject_id' => $subject?->getKey(),
             'description' => $description,
             'properties' => $cleanProps,
-            'ip_address' => $request?->ip(),
-            'user_agent' => $request ? substr((string) $request->userAgent(), 0, 255) : null,
+            'ip_address' => $request->ip(),
+            'user_agent' => substr((string) $request->userAgent(), 0, 255),
         ]);
     }
 }

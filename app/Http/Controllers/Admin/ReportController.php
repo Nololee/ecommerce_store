@@ -81,6 +81,9 @@ class ReportController extends Controller
 
         $callback = function () use ($type) {
             $handle = fopen('php://output', 'w');
+            if (! is_resource($handle)) {
+                return;
+            }
 
             if ($type === 'orders') {
                 fputcsv($handle, ['Tracking Number', 'Customer Name', 'Customer Email', 'Subtotal', 'Shipping', 'Total', 'Payment Status', 'Order Status', 'Created At']);
@@ -102,12 +105,13 @@ class ReportController extends Controller
             } elseif ($type === 'products') {
                 fputcsv($handle, ['ID', 'SKU', 'Name', 'Category', 'Price', 'Stock Quantity', 'Status']);
                 Product::with('category')->latest()->chunk(100, function ($products) use ($handle) {
+                    /** @var Product $product */
                     foreach ($products as $product) {
                         fputcsv($handle, [
                             $product->id,
                             $product->sku,
                             $product->name,
-                            $product->category?->name ?? 'Uncategorized',
+                            $product->category ? $product->category->name : 'Uncategorized',
                             $product->price,
                             $product->stock_quantity,
                             $product->is_active ? 'Active' : 'Inactive',

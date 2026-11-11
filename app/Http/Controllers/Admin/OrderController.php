@@ -78,6 +78,7 @@ class OrderController extends Controller
 
         // Restock inventory if order is cancelled from a non-cancelled state
         if ($newStatus === 'cancelled' && $oldStatus !== 'cancelled') {
+            /** @var \App\Models\OrderItem $item */
             foreach ($order->items as $item) {
                 if ($item->product) {
                     $stockBefore = $item->product->stock_quantity;

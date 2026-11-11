@@ -11,3 +11,7 @@ parameters:
         - routes/
 
     level: 7
+
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false

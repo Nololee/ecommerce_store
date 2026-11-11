@@ -55,6 +55,7 @@ class InventoryController extends Controller
             'reason' => ['required', 'string', 'max:255'],
         ]);
 
+        /** @var Product $product */
         $product = Product::findOrFail($validated['product_id']);
         $before = $product->stock_quantity;
         $after = max(0, $before + $validated['quantity_change']);

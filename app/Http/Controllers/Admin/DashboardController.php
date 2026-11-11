@@ -136,18 +136,25 @@ class DashboardController extends Controller
             ->orderByDesc('total_sold')
             ->take(6)
             ->get()
-            ->map(fn ($item) => [
-                'name' => $item->product_name,
-                'total_sold' => (int) $item->total_sold,
-                'total_revenue' => (float) $item->total_revenue,
-            ]);
+            ->map(function ($item) {
+                /** @var object{product_name: string, total_sold: numeric, total_revenue: numeric} $item */
+                return [
+                    'name' => $item->product_name,
+                    'total_sold' => (int) $item->total_sold,
+                    'total_revenue' => (float) $item->total_revenue,
+                ];
+            });
 
         // Best Selling Categories
         $salesByCategory = Category::with(['products.orderItems'])
             ->get()
             ->map(function ($category) {
-                $revenue = $category->products->flatMap->orderItems->sum('line_total');
-                $sold = $category->products->flatMap->orderItems->sum('quantity');
+                $revenue = $category->products->sum(function ($product) {
+                    return $product->orderItems->sum('line_total');
+                });
+                $sold = $category->products->sum(function ($product) {
+                    return $product->orderItems->sum('quantity');
+                });
 
                 return [
                     'category' => $category->name,

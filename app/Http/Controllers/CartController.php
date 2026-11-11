@@ -19,7 +19,7 @@ class CartController extends Controller
             ->whereIn('id', array_keys($cart))
             ->get();
 
-        $items = $products->map(function ($product) use ($cart) {
+        $items = $products->map(function (Product $product) use ($cart) {
             $quantity = (int) ($cart[$product->id] ?? 1);
 
             return [
