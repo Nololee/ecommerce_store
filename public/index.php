@@ -10,6 +10,8 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
     require $maintenance;
 }
 
+// Increase max execution time to avoid timeout
+ini_set('max_execution_time', 0);
 // Register the Composer autoloader...
 require __DIR__.'/../vendor/autoload.php';
 

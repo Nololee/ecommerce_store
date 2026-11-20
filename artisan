@@ -1,5 +1,9 @@
 #!/usr/bin/env php
 <?php
+// Increase max execution time to avoid timeout
+ini_set('max_execution_time', 0);
+?>
+<?php
 
 use Illuminate\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -37,11 +38,15 @@ class OrderTrackingController extends Controller
         ]);
     }
 
-    public function show(string $trackingNumber): Response
+    public function show(string $trackingNumber): Response|RedirectResponse
     {
         $order = Order::with(['items.product'])
             ->where('tracking_number', $trackingNumber)
-            ->firstOrFail();
+            ->first();
+
+        if (! $order) {
+            return redirect()->route('orders.track')->with('error', "Order #{$trackingNumber} was not found.");
+        }
 
         return Inertia::render('orders/show', [
             'order' => [

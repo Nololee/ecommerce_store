@@ -356,6 +356,16 @@ export default function OrderShow({ order }: Props) {
                                 </div>
                             </div>
 
+                            {order.payment_status === 'pending' &&
+                                order.payment_method === 'payfast_sandbox' && (
+                                    <Link
+                                        href={`/checkout/payfast/${order.tracking_number}`}
+                                        className="block w-full rounded-2xl bg-[#ea1c24] py-3.5 text-center text-xs font-bold tracking-wider text-white uppercase shadow-md transition hover:bg-[#c9141c]"
+                                    >
+                                        Complete PayFast Payment
+                                    </Link>
+                                )}
+
                             <Link
                                 href="/shop"
                                 className="block w-full rounded-2xl bg-[#252820] py-3.5 text-center text-xs font-bold tracking-wider text-white uppercase shadow-md transition hover:bg-[#8b9060]"

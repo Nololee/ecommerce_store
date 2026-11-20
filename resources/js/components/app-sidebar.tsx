@@ -1,10 +1,21 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    BarChart3,
+    FolderTree,
+    Home,
+    LayoutDashboard,
+    MapPin,
+    Package,
+    Settings,
+    ShoppingBag,
+    ShoppingCart,
+    Store,
+    Users,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { TeamSwitcher } from '@/components/team-switcher';
 import {
     Sidebar,
     SidebarContent,
@@ -14,32 +25,93 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { NavItem, User } from '@/types';
 
 export function AppSidebar() {
-    const dashboardUrl = dashboard().url;
+    const page = usePage<{ auth?: { user?: User | null } }>();
+    const user = page.props.auth?.user;
+    const isAdmin = Boolean(user?.is_admin);
 
-    const mainNavItems: NavItem[] = [
-        {
-            title: 'Dashboard',
-            href: dashboardUrl,
-            icon: LayoutGrid,
-        },
-    ];
+    const mainNavItems: NavItem[] = isAdmin
+        ? [
+              {
+                  title: 'Admin Dashboard',
+                  href: '/admin',
+                  icon: LayoutDashboard,
+              },
+              {
+                  title: 'Products',
+                  href: '/admin/products',
+                  icon: Package,
+              },
+              {
+                  title: 'Categories',
+                  href: '/admin/categories',
+                  icon: FolderTree,
+              },
+              {
+                  title: 'Orders',
+                  href: '/admin/orders',
+                  icon: ShoppingBag,
+              },
+              {
+                  title: 'Sales & Analytics',
+                  href: '/admin/reports',
+                  icon: BarChart3,
+              },
+              {
+                  title: 'Customers',
+                  href: '/admin/customers',
+                  icon: Users,
+              },
+          ]
+        : [
+              {
+                  title: 'Store Dashboard',
+                  href: '/customer/dashboard',
+                  icon: LayoutDashboard,
+              },
+              {
+                  title: 'My Orders',
+                  href: '/customer/orders',
+                  icon: Package,
+              },
+              {
+                  title: 'Purchase History',
+                  href: '/customer/purchase-history',
+                  icon: ShoppingBag,
+              },
+              {
+                  title: 'Track Orders',
+                  href: '/customer/tracking',
+                  icon: MapPin,
+              },
+              {
+                  title: 'Delivery Addresses',
+                  href: '/customer/addresses',
+                  icon: Home,
+              },
+          ];
 
     const footerNavItems: NavItem[] = [
         {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
-            icon: FolderGit2,
+            title: 'Browse Store',
+            href: '/',
+            icon: Store,
         },
         {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#react',
-            icon: BookOpen,
+            title: 'Shopping Cart',
+            href: '/cart',
+            icon: ShoppingCart,
+        },
+        {
+            title: 'Account Settings',
+            href: '/settings/profile',
+            icon: Settings,
         },
     ];
+
+    const logoHref = isAdmin ? '/admin' : '/customer/dashboard';
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -47,15 +119,10 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboardUrl} prefetch>
+                            <Link href={logoHref} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <TeamSwitcher />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>

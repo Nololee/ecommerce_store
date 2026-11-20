@@ -19,16 +19,16 @@ type Props = {
 export default function Register({ passwordRules, teamInvitation }: Props) {
     return (
         <>
-            <Head title="Create Account | Your Store" />
+            <Head title="Create Account | ARENOLO STORE" />
 
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-950 text-lg font-bold text-white">
-                            Y
+                            A
                         </div>
                         <span className="text-lg font-bold tracking-wide text-stone-900">
-                            YOUR STORE
+                            ARENOLO STORE
                         </span>
                     </div>
 
@@ -182,7 +182,4 @@ export default function Register({ passwordRules, teamInvitation }: Props) {
     );
 }
 
-Register.layout = {
-    title: 'Join our store',
-    description: 'Create an account to get started with shopping.',
-};
+

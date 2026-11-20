@@ -128,6 +128,19 @@ export default function CustomerOrderShow({ order }: Props) {
                         )}
                     </div>
 
+                    {/* Retry PayFast Payment Button */}
+                    {order.payment_status === 'pending' &&
+                        order.payment_method === 'payfast_sandbox' && (
+                            <div className="mt-4">
+                                <Link
+                                    href={`/checkout/payfast/${order.tracking_number}`}
+                                    className="block w-full rounded-2xl bg-[#ea1c24] py-3 text-center text-xs font-bold tracking-wider text-white uppercase shadow-md transition hover:bg-[#c9141c]"
+                                >
+                                    Complete PayFast Payment
+                                </Link>
+                            </div>
+                        )}
+
                     <div>
                         <span className="text-[11px] font-bold tracking-wider text-stone-400 uppercase">
                             Total Order Value

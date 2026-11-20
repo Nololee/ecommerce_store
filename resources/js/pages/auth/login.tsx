@@ -26,7 +26,7 @@ export default function Login({
 }: Props) {
     return (
         <>
-            <Head title="Login | Your Store" />
+            <Head title="Login | ARENOLO STORE" />
 
             {teamInvitation && (
                 <TeamInvitationAlert
@@ -171,7 +171,4 @@ export default function Login({
     );
 }
 
-Login.layout = {
-    title: 'Welcome back',
-    description: 'Sign in to your account and continue shopping.',
-};
+

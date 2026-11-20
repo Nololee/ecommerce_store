@@ -21,12 +21,15 @@ class PayFastPaymentController extends Controller
      */
     public function redirect(Request $request, string $trackingNumber): Response|RedirectResponse
     {
-        $order = Order::where('tracking_number', $trackingNumber)
-            ->where('user_id', $request->user()->id)
-            ->firstOrFail();
+        $order = Order::where('tracking_number', $trackingNumber)->first();
+
+        if (! $order) {
+            return redirect()->route('orders.track')->with('error', "Order #{$trackingNumber} was not found.");
+        }
 
         if ($order->payment_status === 'paid') {
-            return redirect()->route('orders.show', $order->tracking_number);
+            return redirect()->route('shop.index')
+                ->with('success', "Order #{$order->tracking_number} has already been paid successfully.");
         }
 
         $payload = $this->payFastService->generatePaymentPayload($order);
@@ -37,9 +40,13 @@ class PayFastPaymentController extends Controller
                 'tracking_number' => $order->tracking_number,
                 'total_amount' => (float) $order->total_amount,
                 'customer_name' => $order->customer_name,
+                'customer_email' => $order->customer_email,
             ],
             'payload' => $payload,
             'processUrl' => $processUrl,
+            'sandbox' => (bool) config('services.payfast.sandbox'),
+            'returnUrl' => route('checkout.payfast.return', $order->tracking_number),
+            'cancelUrl' => route('checkout.payfast.cancel', $order->tracking_number),
         ]);
     }
 
@@ -48,7 +55,11 @@ class PayFastPaymentController extends Controller
      */
     public function return(Request $request, string $trackingNumber): RedirectResponse
     {
-        $order = Order::where('tracking_number', $trackingNumber)->firstOrFail();
+        $order = Order::where('tracking_number', $trackingNumber)->first();
+
+        if (! $order) {
+            return redirect()->route('shop.index')->with('error', 'Order not found.');
+        }
 
         // In Sandbox / Test Mode, mark payment as paid if return from gateway
         if (config('services.payfast.sandbox') && $order->payment_status !== 'paid') {
@@ -67,8 +78,8 @@ class PayFastPaymentController extends Controller
             );
         }
 
-        return redirect()->route('orders.show', $order->tracking_number)
-            ->with('success', 'Your PayFast payment has been approved successfully!');
+        return redirect()->route('shop.index')
+            ->with('success', "Your payment for Order #{$order->tracking_number} was approved successfully! Thank you for your purchase.");
     }
 
     /**
@@ -76,9 +87,13 @@ class PayFastPaymentController extends Controller
      */
     public function cancel(Request $request, string $trackingNumber): RedirectResponse
     {
-        $order = Order::where('tracking_number', $trackingNumber)->firstOrFail();
+        $order = Order::where('tracking_number', $trackingNumber)->first();
 
-        return redirect()->route('customer.orders.show', $order->tracking_number)
+        if (! $order) {
+            return redirect()->route('orders.track')->with('error', 'Order not found.');
+        }
+
+        return redirect()->route('orders.show', $order->tracking_number)
             ->with('error', 'Payment was cancelled. You can retry paying whenever you are ready.');
     }
 
@@ -99,6 +114,14 @@ class PayFastPaymentController extends Controller
 
         if (! $order) {
             return response('Order Not Found', 404);
+        }
+
+        // Validate signature if provided
+        $passphrase = config('services.payfast.passphrase');
+        if (! empty($pfData['signature']) && ! $this->payFastService->validateSignature($pfData, $passphrase)) {
+            Log::warning('PayFast ITN signature mismatch for Order #'.$order->tracking_number);
+
+            return response('Signature Mismatch', 400);
         }
 
         $paymentStatus = strtolower($pfData['payment_status'] ?? '');

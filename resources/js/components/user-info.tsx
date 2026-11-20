@@ -26,16 +26,15 @@ export function UserInfo({
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                {team ? (
-                    <span className="truncate text-xs text-muted-foreground">
-                        {team.name}
+                {user.is_admin ? (
+                    <span className="truncate text-xs font-semibold text-[#8b9060]">
+                        Administrator
                     </span>
-                ) : null}
-                {!team && showEmail ? (
+                ) : (
                     <span className="truncate text-xs text-muted-foreground">
                         {user.email}
                     </span>
-                ) : null}
+                )}
             </div>
         </>
     );

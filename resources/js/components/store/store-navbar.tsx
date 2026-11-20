@@ -1,5 +1,5 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import { LogOut, Menu, Package, ShoppingBag, User, X } from 'lucide-react';
+import { LogOut, Menu, Package, Shield, ShoppingBag, User, X } from 'lucide-react';
 import { useState } from 'react';
 
 type SharedProps = {
@@ -9,6 +9,7 @@ type SharedProps = {
             id: number;
             name: string;
             email: string;
+            is_admin?: boolean;
         } | null;
     };
 };
@@ -85,6 +86,17 @@ export default function StoreNavbar() {
 
                     {auth?.user ? (
                         <div className="flex items-center gap-3">
+                            {auth.user.is_admin ? (
+                                <Link
+                                    href="/admin"
+                                    className="hidden items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1.5 text-xs font-bold text-indigo-700 transition hover:bg-indigo-100 sm:flex"
+                                    title="E-Commerce Admin Dashboard"
+                                >
+                                    <Shield className="h-3.5 w-3.5" />
+                                    <span>Admin Panel</span>
+                                </Link>
+                            ) : null}
+
                             <Link
                                 href="/customer/dashboard"
                                 className="hidden items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-3.5 py-1.5 transition hover:border-[#8b9060] hover:bg-[#8b9060]/10 sm:flex"
@@ -185,6 +197,15 @@ export default function StoreNavbar() {
                                     <p className="text-xs font-bold text-stone-500">
                                         Signed in as {auth.user.name}
                                     </p>
+                                    {auth.user.is_admin ? (
+                                        <Link
+                                            href="/admin"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="block rounded-xl bg-indigo-600 py-2.5 text-center font-semibold text-white shadow-xs"
+                                        >
+                                            Admin Dashboard
+                                        </Link>
+                                    ) : null}
                                     <Link
                                         href="/customer/dashboard"
                                         onClick={() => setMobileMenuOpen(false)}

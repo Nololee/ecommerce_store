@@ -38,8 +38,10 @@ return [
     'payfast' => [
         'merchant_id' => env('PAYFAST_MERCHANT_ID', '10000100'), // Default PayFast sandbox test merchant ID
         'merchant_key' => env('PAYFAST_MERCHANT_KEY', '46f0cd694581a'), // Default PayFast sandbox test merchant key
-        'passphrase' => env('PAYFAST_PASSPHRASE', null),
+        'passphrase' => env('PAYFAST_PASSPHRASE', env('PAYFAST_MERCHANT_ID', '10000100') === '10000100' ? 'jt7NOE43FZPn' : null),
         'sandbox' => env('PAYFAST_SANDBOX', true),
+        'merchant_email' => env('PAYFAST_MERCHANT_EMAIL', 'bonolo.tshoane83@gmail.com'),
+        'callback_url' => env('PAYFAST_CALLBACK_URL', null),
         'url' => env('PAYFAST_SANDBOX', true)
             ? 'https://sandbox.payfast.co.za/eng/process'
             : 'https://www.payfast.co.za/eng/process',

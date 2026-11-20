@@ -53,6 +53,7 @@ Route::get('/', function () {
 
 // Shop catalogue & product details
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::redirect('/browse', '/shop');
 Route::get('/shop/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
 
 // Shopping Cart
@@ -66,12 +67,12 @@ Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
 Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-
-    // PayFast Gateway Redirect & Callback Routes
-    Route::get('/checkout/payfast/{tracking_number}', [PayFastPaymentController::class, 'redirect'])->name('checkout.payfast.redirect');
-    Route::get('/checkout/payfast/{tracking_number}/return', [PayFastPaymentController::class, 'return'])->name('checkout.payfast.return');
-    Route::get('/checkout/payfast/{tracking_number}/cancel', [PayFastPaymentController::class, 'cancel'])->name('checkout.payfast.cancel');
 });
+
+// PayFast Gateway Redirect & Callback Routes (Publicly accessible with tracking number)
+Route::get('/checkout/payfast/{tracking_number}', [PayFastPaymentController::class, 'redirect'])->name('checkout.payfast.redirect');
+Route::get('/checkout/payfast/{tracking_number}/return', [PayFastPaymentController::class, 'return'])->name('checkout.payfast.return');
+Route::get('/checkout/payfast/{tracking_number}/cancel', [PayFastPaymentController::class, 'cancel'])->name('checkout.payfast.cancel');
 
 // PayFast ITN Webhook (Publicly accessible by PayFast servers)
 Route::post('/checkout/payfast/notify', [PayFastPaymentController::class, 'notify'])

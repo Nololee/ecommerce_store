@@ -64,9 +64,9 @@ export default function ChooseView() {
                             {/* Admin panel button */}
                             <button
                                 onClick={goAdmin}
-                                className="group flex flex-col items-center gap-3 rounded-xl border-2 border-indigo-100 bg-indigo-50 p-6 text-center transition-all duration-200 hover:border-indigo-500 hover:bg-indigo-100 hover:shadow-md focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                                className="group flex flex-col items-center gap-3 rounded-xl border-2 border-emerald-100 bg-emerald-50 p-6 text-center transition-all duration-200 hover:border-emerald-500 hover:bg-emerald-100 hover:shadow-md focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:outline-none"
                             >
-                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-200 transition-transform group-hover:scale-110">
+                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-200 transition-transform group-hover:scale-110">
                                     <LayoutDashboard className="h-7 w-7" />
                                 </div>
                                 <div>

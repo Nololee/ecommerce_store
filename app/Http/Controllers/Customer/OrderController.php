@@ -75,10 +75,13 @@ class OrderController extends Controller
     {
         $user = $request->user();
 
-        $order = Order::where('user_id', $user->id)
-            ->where('tracking_number', $trackingNumber)
-            ->with(['items.product'])
-            ->firstOrFail();
+        $query = Order::where('tracking_number', $trackingNumber)->with(['items.product']);
+
+        if (! $user->is_admin) {
+            $query->where('user_id', $user->id);
+        }
+
+        $order = $query->firstOrFail();
 
         return Inertia::render('customer/orders/show', [
             'order' => [
